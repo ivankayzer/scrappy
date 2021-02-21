@@ -7,11 +7,16 @@ const router = (() => {
     },
   };
 
-  const router = (path) => {
-    return routes[path];
-  };
+  const getRoute = (path) => routes[path];
 
   const timeout = 600;
+
+  const errorPromise = () =>
+    new Promise((_, reject) => {
+      setTimeout(() => {
+        reject(new Error("Request was unsuccessful"));
+      }, timeout);
+    });
 
   const successPromise = (response) => {
     if (!response) {
@@ -25,23 +30,13 @@ const router = (() => {
     });
   };
 
-  const errorPromise = () => {
-    return new Promise((_, reject) => {
-      setTimeout(() => {
-        reject({
-          error: "Request was unsuccessful",
-        });
-      }, timeout);
-    });
-  };
-
   return {
     error: () => errorPromise(),
-    get: (path) => successPromise(router(path)),
-    post: (path) => successPromise(router(path)),
-    put: (path) => successPromise(router(path)),
-    patch: (path) => successPromise(router(path)),
-    delete: (path) => successPromise(router(path)),
+    get: (path) => successPromise(getRoute(path)),
+    post: (path) => successPromise(getRoute(path)),
+    put: (path) => successPromise(getRoute(path)),
+    patch: (path) => successPromise(getRoute(path)),
+    delete: (path) => successPromise(getRoute(path)),
   };
 })();
 
