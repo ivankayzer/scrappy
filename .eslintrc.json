@@ -6,7 +6,8 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "airbnb",
+        "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -16,8 +17,10 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "jest"
     ],
     "rules": {
+        "no-unused-vars": "warn"
     }
 }

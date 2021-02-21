@@ -11,6 +11,13 @@ const router = (() => {
 
   const timeout = 600;
 
+  const errorPromise = () =>
+    new Promise((_, reject) => {
+      setTimeout(() => {
+        reject(new Error("Request was unsuccessful"));
+      }, timeout);
+    });
+
   const successPromise = (response) => {
     if (!response) {
       return errorPromise();
@@ -22,15 +29,6 @@ const router = (() => {
       }, timeout);
     });
   };
-
-  const errorPromise = () =>
-    new Promise((_, reject) => {
-      setTimeout(() => {
-        reject({
-          error: "Request was unsuccessful",
-        });
-      }, timeout);
-    });
 
   return {
     error: () => errorPromise(),
