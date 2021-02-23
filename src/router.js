@@ -27,8 +27,6 @@ const router = (() => {
           new: "Price: 2799,00 PLN",
         },
       ],
-    },
-    {
       isImportant: true,
       timestamp: "15 minutes ago",
       color: "green",

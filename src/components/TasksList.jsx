@@ -114,10 +114,7 @@ const TasksList = ({ tasks, selectedId, setSelected }) => (
                           </div>
                         </li>
 
-                        <li
-                          id="listbox-item-0"
-                          className="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-0"
-                        >
+                        <li className="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-0">
                           <div className="flex items-center">
                             <span
                               className="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"

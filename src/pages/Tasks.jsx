@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import router from "../router";
 import TaskDetails from "../components/TaskDetails";
 import TasksList from "../components/TasksList";
+import Modal from "../components/Modal";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
