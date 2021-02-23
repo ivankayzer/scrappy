@@ -10,10 +10,11 @@ const Task = ({
   isSelected,
   isActive,
   needsAttention,
+  onClick,
 }) => {
   const borderColor = () => {
     if (!isActive) {
-      return "border-gray-200"
+      return "border-gray-200";
     }
 
     if (!needsAttention) {
@@ -21,10 +22,11 @@ const Task = ({
     }
 
     return "border-yellow-300";
-  }
+  };
 
   return (
     <li
+      onClick={onClick}
       style={{ minHeight: 121 }}
       className={`bg-white py-5 px-6 cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-inset relative focus-within:ring-blue-600 ${
         isSelected ? "bg-gray-100" : ""
@@ -68,8 +70,13 @@ export const taskPropTypes = {
   isSelected: PropTypes.bool.isRequired,
   isActive: PropTypes.bool.isRequired,
   needsAttention: PropTypes.bool.isRequired,
+  onClick: PropTypes.func,
 };
 
 Task.propTypes = taskPropTypes;
+
+Task.defaultProps = {
+  onClick: () => {},
+};
 
 export default Task;

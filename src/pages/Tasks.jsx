@@ -11,8 +11,8 @@ const Tasks = () => {
 
   useEffect(() => {
     router.get("/tasks").then((response) => {
-        setTasks(response);
-        setSelectedTask(response[0])
+      setTasks(response);
+      setSelectedTask(response[0]);
     });
   }, []);
 
@@ -34,7 +34,11 @@ const Tasks = () => {
             />
           )}
 
-          <TasksList selectedId={selectedTask?.id} tasks={tasks} />
+          <TasksList
+            setSelected={(task) => setSelectedTask(task)}
+            selectedId={selectedTask?.id}
+            tasks={tasks}
+          />
         </main>
       </div>
     </div>
