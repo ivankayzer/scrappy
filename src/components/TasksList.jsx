@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Task, { taskPropTypes } from "./Task";
 
-const TasksList = ({ tasks }) => (
+const TasksList = ({ tasks, selectedId }) => (
   <aside className="hidden xl:block xl:flex-shrink-0 xl:order-first w-2/6">
     <div className="h-full relative flex flex-col w-full border-r border-gray-200 bg-gray-100">
       <div className="flex-shrink-0">
@@ -35,7 +35,7 @@ const TasksList = ({ tasks }) => (
                   type="search"
                   name="search"
                   id="search"
-                  className="focus:ring-cyan-500 focus:border-cyan-400 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                  className="focus:ring-blue-500 focus:border-blue-400 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
                   placeholder="Search"
                 />
               </div>
@@ -50,12 +50,8 @@ const TasksList = ({ tasks }) => (
                         className="bg-green-400 flex-shrink-0 inline-block h-2 w-2 rounded-full"
                         aria-hidden="true"
                       />
-                      <span
-                        className="bg-yellow-400 flex-shrink-0 inline-block -ml-1 h-2 w-2 rounded-full"
-                      />
-                      <span
-                        className="bg-gray-200 flex-shrink-0 inline-block -ml-1 h-2 w-2 rounded-full"
-                      />
+                      <span className="bg-yellow-400 flex-shrink-0 inline-block -ml-1 h-2 w-2 rounded-full" />
+                      <span className="bg-gray-200 flex-shrink-0 inline-block -ml-1 h-2 w-2 rounded-full" />
                       <span className="ml-3 block truncate">All</span>
                     </div>
                     <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -111,9 +107,7 @@ const TasksList = ({ tasks }) => (
                           className="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-0"
                         >
                           <div className="flex items-center">
-                            <span
-                              className="bg-yellow-300 flex-shrink-0 inline-block h-2 w-2 rounded-full"
-                            />
+                            <span className="bg-yellow-300 flex-shrink-0 inline-block h-2 w-2 rounded-full" />
                             <span className="ml-3 font-normal block">
                               Needs attention
                             </span>
@@ -147,6 +141,9 @@ const TasksList = ({ tasks }) => (
         <ul className="border-b border-gray-200 divide-y divide-gray-200">
           {tasks.map((task) => (
             <Task
+              isActive={task.isActive}
+              needsAttention={task.needsAttention}
+              isSelected={task.id === selectedId}
               name={task.name}
               checkFrequency={task.checkFrequency}
               lastChecked={task.lastChecked}
@@ -162,6 +159,11 @@ const TasksList = ({ tasks }) => (
 
 TasksList.propTypes = {
   tasks: PropTypes.arrayOf(taskPropTypes).isRequired,
+  selectedId: PropTypes.number,
+};
+
+TasksList.defaultProps = {
+  selectedId: null,
 };
 
 export default TasksList;

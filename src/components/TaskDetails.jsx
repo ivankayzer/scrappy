@@ -47,7 +47,7 @@ const TaskDetails = ({
           <div className="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
             <button
               type="button"
-              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-cyan-500"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
             >
               <span className="flex-shrink-0 flex items-center justify-center mr-3">
                 <span
@@ -59,7 +59,7 @@ const TaskDetails = ({
             </button>
             <button
               type="button"
-              className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-cyan-500"
+              className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
             >
               Edit
             </button>
@@ -73,15 +73,15 @@ const TaskDetails = ({
               <span className="relative z-0 inline-flex shadow-sm rounded-md">
                 <button
                   type="button"
-                  className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-cyan-500
-                                                bg-cyan-600 text-sm font-medium text-white hover:bg-cyan-600 focus:z-10
-                                                focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
+                  className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-blue-500
+                                                bg-blue-600 text-sm font-medium text-white hover:bg-blue-600 focus:z-10
+                                                focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 >
                   Events
                 </button>
                 <button
                   type="button"
-                  className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
+                  className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 >
                   All activity
                 </button>
@@ -125,11 +125,11 @@ const TaskDetails = ({
               <div>
                 <p className="text-sm text-gray-700">
                   Showing
-                  <span className="font-medium">1</span>
+                  <span className="font-medium mx-1">1</span>
                   to
-                  <span className="font-medium">5</span>
+                  <span className="font-medium mx-1">5</span>
                   of
-                  <span className="font-medium">97</span>
+                  <span className="font-medium mx-1">97</span>
                   results
                 </p>
               </div>

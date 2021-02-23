@@ -49,6 +49,7 @@ const router = (() => {
     },
     "/tasks": [
       {
+        id: 1,
         name: "RTV EURO AGD - PS5",
         url:
           "https://www.euro.com.pl/konsole-playstation-5/sony-konsola-playstation-5-ps5-blu-ray-4k.bhtml",
@@ -60,6 +61,7 @@ const router = (() => {
         events,
       },
       {
+        id: 2,
         name: "MediaMarkt - PS5",
         url: "https://mediamarkt.pl/konsole-i-gry/playstation-5",
         isActive: true,
@@ -70,6 +72,7 @@ const router = (() => {
         events,
       },
       {
+        id: 3,
         name: "PS5 - MediaExpert",
         url: "https://www.mediaexpert.pl/gaming/playstation-5/konsole-ps5",
         isActive: false,
@@ -80,6 +83,7 @@ const router = (() => {
         events,
       },
       {
+        id: 4,
         name: "XKOM - Playstation 5",
         url:
           "https://www.x-kom.pl/p/577878-konsola-playstation-sony-playstation-5.html",
