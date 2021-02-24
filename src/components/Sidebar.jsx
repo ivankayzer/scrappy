@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Modal from "./Modal";
 import AccountSettings from "./modals/AccountSettings";
+import Notifications from "./modals/Notifications";
 
 const AuthIcons = () => (
   <a
@@ -25,9 +25,11 @@ const AuthIcons = () => (
   </a>
 );
 
-const GuestIcons = () => (
+const GuestIcons = ({ openNotifications }) => (
   <>
+    {/* notifications icon */}
     <a
+      onClick={openNotifications}
       href="#"
       className="text-gray-400 hover:bg-gray-700 flex-shrink-0 inline-flex items-center justify-center h-14 w-14 rounded-lg"
     >
@@ -71,6 +73,7 @@ const GuestIcons = () => (
 
 const Sidebar = ({ user }) => {
   const [showSettings, setShowSettings] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   return (
     <nav
       aria-label="Sidebar"
@@ -94,13 +97,14 @@ const Sidebar = ({ user }) => {
         style={{ height: "calc(100% - 64px)" }}
       >
         <div className="relative w-20 flex flex-col p-3 space-y-3">
-          {user ? <AuthIcons /> : <GuestIcons />}
+          {!user ? <AuthIcons /> : <GuestIcons openNotifications={() => setShowNotifications(true)} />}
         </div>
         <div className="relative w-20 flex flex-col p-3 space-y-3">
           <a
             href="#"
             className="text-gray-400 hover:bg-gray-700 flex-shrink-0 inline-flex items-center justify-center h-14 w-14 rounded-lg"
           >
+            {/* dark mode icon */}
             <svg
               className="w-6 h-6"
               fill="none"
@@ -116,13 +120,14 @@ const Sidebar = ({ user }) => {
               />
             </svg>
           </a>
-          {!user && (
+          {user && (
             <>
               <a
                 onClick={() => setShowSettings(true)}
                 href="#"
                 className="text-gray-400 hover:bg-gray-700 flex-shrink-0 inline-flex items-center justify-center h-14 w-14 rounded-lg"
               >
+                {/* user settings icon */}
                 <svg
                   className="h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
@@ -143,6 +148,7 @@ const Sidebar = ({ user }) => {
                 href="#"
                 className="text-gray-400 hover:bg-gray-700 flex-shrink-0 inline-flex items-center justify-center h-14 w-14 rounded-lg"
               >
+                {/* logout */}
                 <svg
                   className="w-6 h-6"
                   fill="none"
@@ -166,6 +172,10 @@ const Sidebar = ({ user }) => {
         close={() => setShowSettings(false)}
         isOpen={showSettings}
       />
+      <Notifications
+        close={() => setShowNotifications(false)}
+        isOpen={showNotifications}
+      />
     </nav>
   );
 };
@@ -178,6 +188,10 @@ Sidebar.propTypes = {
 
 Sidebar.defaultProps = {
   user: null,
+};
+
+GuestIcons.propTypes = {
+  openNotifications: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

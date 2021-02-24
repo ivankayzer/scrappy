@@ -7,12 +7,20 @@ const TasksList = ({ tasks, selectedId, setSelected }) => (
     <div className="h-full relative flex flex-col w-full border-r border-gray-200 bg-gray-100">
       <div className="flex-shrink-0">
         <div className="px-6 pt-6 pb-4 bg-white border-b">
-          <div className="flex items-center space-x-3">
-            <h2 className="text-xl font-medium text-gray-900">Tasks</h2>
+          <div className="flex justify-between">
+            <div>
+              <div className="flex items-center space-x-3">
+                <h2 className="text-xl font-medium text-gray-900">Tasks</h2>
+              </div>
+              <p className="mt-1 text-sm text-gray-600">
+                Search list of {tasks.length} tasks
+              </p>
+            </div>
+
+            <div>
+              <button type="button">Add a task</button>
+            </div>
           </div>
-          <p className="mt-1 text-sm text-gray-600">
-            Search list of {tasks.length} tasks
-          </p>
           <form className="mt-6 flex space-x-4" action="#">
             <div className="flex items-center justify-between w-full min-w-0">
               <div className="relative rounded-md shadow-sm w-full">

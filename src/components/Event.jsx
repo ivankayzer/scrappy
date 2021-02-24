@@ -1,7 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Event = ({ isLast, color, name, subtext, timestamp, changes }) => (
+const Event = ({
+  isLast,
+  color,
+  name,
+  subtext,
+  timestamp,
+  changes,
+  taskName,
+}) => (
   <li>
     <div className="relative pb-8">
       {!isLast && (
@@ -35,6 +43,11 @@ const Event = ({ isLast, color, name, subtext, timestamp, changes }) => (
         </div>
         <div className="min-w-0 flex-1">
           <div>
+            {taskName && (
+              <div className="text-lg">
+                <div className="font-bold text-black">{taskName}</div>
+              </div>
+            )}
             <div className="text-sm">
               <div className="font-medium text-gray-900">{name}</div>
             </div>
@@ -88,13 +101,15 @@ export const eventPropTypes = {
     old: PropTypes.string.isRequired,
     new: PropTypes.string.isRequired,
   }),
-}
+  taskName: PropTypes.string,
+};
 
 Event.propTypes = eventPropTypes;
 
 Event.defaultProps = {
   changes: [],
   subtext: null,
+  taskName: null,
 };
 
 export default Event;

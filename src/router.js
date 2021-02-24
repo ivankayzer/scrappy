@@ -1,5 +1,5 @@
 const router = (() => {
-  const events = [
+  let events = [
     {
       name: "Page checked successfully",
       isImportant: false,
@@ -39,60 +39,74 @@ const router = (() => {
     },
   ];
 
+  events = [...events, ...events, ...events];
+
+  const tasks = [
+    {
+      id: 1,
+      name: "RTV EURO AGD - PS5",
+      url:
+        "https://www.euro.com.pl/konsole-playstation-5/sony-konsola-playstation-5-ps5-blu-ray-4k.bhtml",
+      isActive: true,
+      lastChecked: "30 seconds ago",
+      checkFrequency: "every minute",
+      notificationChannel: "telegram",
+      needsAttention: false,
+      events,
+    },
+    {
+      id: 2,
+      name: "MediaMarkt - PS5",
+      url: "https://mediamarkt.pl/konsole-i-gry/playstation-5",
+      isActive: true,
+      lastChecked: "30 seconds ago",
+      checkFrequency: "every 30 minutes",
+      notificationChannel: "telegram",
+      needsAttention: true,
+      events,
+    },
+    {
+      id: 3,
+      name: "PS5 - MediaExpert",
+      url: "https://www.mediaexpert.pl/gaming/playstation-5/konsole-ps5",
+      isActive: false,
+      lastChecked: "30 seconds ago",
+      checkFrequency: "every day",
+      notificationChannel: "telegram",
+      needsAttention: false,
+      events,
+    },
+    {
+      id: 4,
+      name: "XKOM - Playstation 5",
+      url:
+        "https://www.x-kom.pl/p/577878-konsola-playstation-sony-playstation-5.html",
+      isActive: true,
+      lastChecked: "30 seconds ago",
+      checkFrequency: "every minute",
+      notificationChannel: "telegram",
+      needsAttention: false,
+      events,
+    },
+  ];
+
+  const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
   const routes = {
     "/login": {
       user: {
         email: "ivankayzer@gmail.com",
       },
     },
-    "/tasks": [
-      {
-        id: 1,
-        name: "RTV EURO AGD - PS5",
-        url:
-          "https://www.euro.com.pl/konsole-playstation-5/sony-konsola-playstation-5-ps5-blu-ray-4k.bhtml",
-        isActive: true,
-        lastChecked: "30 seconds ago",
-        checkFrequency: "every minute",
-        notificationChannel: "telegram",
-        needsAttention: false,
-        events,
-      },
-      {
-        id: 2,
-        name: "MediaMarkt - PS5",
-        url: "https://mediamarkt.pl/konsole-i-gry/playstation-5",
-        isActive: true,
-        lastChecked: "30 seconds ago",
-        checkFrequency: "every 30 minutes",
-        notificationChannel: "telegram",
-        needsAttention: true,
-        events,
-      },
-      {
-        id: 3,
-        name: "PS5 - MediaExpert",
-        url: "https://www.mediaexpert.pl/gaming/playstation-5/konsole-ps5",
-        isActive: false,
-        lastChecked: "30 seconds ago",
-        checkFrequency: "every day",
-        notificationChannel: "telegram",
-        needsAttention: false,
-        events,
-      },
-      {
-        id: 4,
-        name: "XKOM - Playstation 5",
-        url:
-          "https://www.x-kom.pl/p/577878-konsola-playstation-sony-playstation-5.html",
-        isActive: true,
-        lastChecked: "30 seconds ago",
-        checkFrequency: "every minute",
-        notificationChannel: "telegram",
-        needsAttention: false,
-        events,
-      },
-    ],
+    "/tasks": tasks,
+    "/events": events.map((event) => {
+      const taskName = random(tasks).name;
+
+      return {
+        ...event,
+        taskName,
+      };
+    }),
   };
 
   const getRoute = (path) => routes[path];

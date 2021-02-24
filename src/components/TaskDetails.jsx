@@ -89,7 +89,7 @@ const TaskDetails = ({
             </div>
             <div className="flow-root">
               <ul
-                className="-mb-8 overflow-scroll"
+                className="-mb-8 overflow-y-auto"
                 style={{ height: "calc(100vh - 365px)" }}
               >
                 {events.map((event, i) => (

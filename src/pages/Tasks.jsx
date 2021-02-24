@@ -21,7 +21,7 @@ const Tasks = () => {
     <div className="h-screen flex flex-col">
       <MobileNavigation />
       <div className="min-h-0 flex-1 flex md:overflow-hidden">
-        <Sidebar />
+        <Sidebar user />
 
         <main className="min-w-0 flex-1 border-t border-gray-200 xl:flex">
           {selectedTask && (

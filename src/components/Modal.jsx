@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Modal = ({ wide, children, isOpen, close }) => {
+const Modal = ({ wide, children, isOpen, close, title }) => {
   if (!isOpen) {
     return null;
   }
@@ -33,7 +33,7 @@ const Modal = ({ wide, children, isOpen, close }) => {
                         <div className="flex items-start justify-between space-x-3">
                           <div className="space-y-1">
                             <h1 className="text-2xl font-extrabold text-gray-900 uppercase">
-                              Account settings
+                              {title}
                             </h1>
                           </div>
                           <div className="h-7 flex items-center">
@@ -61,7 +61,7 @@ const Modal = ({ wide, children, isOpen, close }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="px-4 py-6 sm:px-6 overflow-y-scroll">
+                      <div className="px-4 py-6 sm:px-6">
                         <div>
                           <div>
                             <nav className="sm:hidden" aria-label="Back">
@@ -120,6 +120,7 @@ Modal.propTypes = {
   children: PropTypes.node.isRequired,
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 Modal.defaultProps = {
