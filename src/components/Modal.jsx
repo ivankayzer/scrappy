@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Modal = ({ wide, children, isOpen, close, title }) => {
+const Modal = ({ wide, children, isOpen, close, title, subTitle }) => {
   if (!isOpen) {
     return null;
   }
@@ -35,6 +35,11 @@ const Modal = ({ wide, children, isOpen, close, title }) => {
                             <h1 className="text-2xl font-extrabold text-gray-900 uppercase">
                               {title}
                             </h1>
+                            {subTitle && (
+                              <p className="text-sm text-gray-500">
+                                {subTitle}
+                              </p>
+                            )}
                           </div>
                           <div className="h-7 flex items-center">
                             <button
@@ -120,7 +125,8 @@ Modal.propTypes = {
   children: PropTypes.node.isRequired,
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  subTitle: PropTypes.string.isRequired,
 };
 
 Modal.defaultProps = {

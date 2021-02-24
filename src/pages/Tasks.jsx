@@ -5,10 +5,13 @@ import router from "../router";
 import TaskDetails from "../components/TaskDetails";
 import TasksList from "../components/TasksList";
 import Modal from "../components/Modal";
+import ManageTask from "../components/modals/ManageTask";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
+
+  const [manageModal, showManageModal] = useState(false);
 
   useEffect(() => {
     router.get("/tasks").then((response) => {
@@ -36,12 +39,15 @@ const Tasks = () => {
           )}
 
           <TasksList
+            openManageModal={() => showManageModal(true)}
             setSelected={(task) => setSelectedTask(task)}
             selectedId={selectedTask?.id}
             tasks={tasks}
           />
         </main>
       </div>
+
+      <ManageTask close={() => showManageModal(false)} isOpen={manageModal} />
     </div>
   );
 };

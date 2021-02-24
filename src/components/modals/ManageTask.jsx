@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
 import PropTypes from "prop-types";
 import Modal from "../Modal";
@@ -52,7 +53,7 @@ const ManageTask = ({ isOpen, close }) => (
         </div>
         <div className="sm:grid sm:border-t sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-gray-200 sm:pt-5">
           <label
-            htmlFor="url"
+            htmlFor="status"
             className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
           >
             Status
