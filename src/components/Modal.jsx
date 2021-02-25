@@ -1,7 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Modal = ({ wide, children, isOpen, close, title, subTitle }) => {
+const Modal = ({
+  wide,
+  children,
+  isOpen,
+  close,
+  title,
+  subTitle,
+  footerMeta,
+  submit,
+}) => {
   if (!isOpen) {
     return null;
   }
@@ -96,7 +105,12 @@ const Modal = ({ wide, children, isOpen, close, title, subTitle }) => {
                         <div className="mt-10 sm:mt-0 w-full">{children}</div>
                       </div>
                     </div>
-                    <div className="flex-shrink-0 px-4 border-t border-gray-200 py-5 sm:px-6 flex justify-end">
+                    <div
+                      className={`flex-shrink-0 px-4 border-t border-gray-200 py-5 sm:px-6 flex ${
+                        footerMeta ? "justify-between" : "justify-end"
+                      }`}
+                    >
+                      {footerMeta}
                       <div className="space-x-3 flex justify-end">
                         <button
                           onClick={close}
@@ -105,6 +119,7 @@ const Modal = ({ wide, children, isOpen, close, title, subTitle }) => {
                         >
                           Cancel
                         </button>
+                        {submit}
                       </div>
                     </div>
                   </form>
@@ -127,10 +142,14 @@ Modal.propTypes = {
   close: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string.isRequired,
+  footerMeta: PropTypes.node,
+  submit: PropTypes.node,
 };
 
 Modal.defaultProps = {
   wide: false,
+  footerMeta: null,
+  submit: null,
 };
 
 export default Modal;

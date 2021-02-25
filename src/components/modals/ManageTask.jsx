@@ -10,9 +10,49 @@ const ManageTask = ({ isOpen, close }) => (
     isOpen={isOpen}
     close={close}
     title="Create a new task"
+    footerMeta={
+      <nav className="flex items-center justify-center" aria-label="Progress">
+        <p className="text-sm font-medium">Step 1 of 2</p>
+        <ol className="ml-8 flex items-center space-x-5">
+          <li>
+            <a
+              href="#"
+              className="relative flex items-center justify-center"
+              aria-current="step"
+            >
+              <span className="absolute w-5 h-5 p-px flex" aria-hidden="true">
+                <span className="w-full h-full rounded-full bg-indigo-200" />
+              </span>
+              <span
+                className="relative block w-2.5 h-2.5 bg-indigo-600 rounded-full"
+                aria-hidden="true"
+              />
+              <span className="sr-only">Step 1</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              className="block w-2.5 h-2.5 bg-gray-200 rounded-full hover:bg-gray-400"
+            >
+              <span className="sr-only">Step 2</span>
+            </a>
+          </li>
+        </ol>
+      </nav>
+    }
+    submit={
+      <button
+        type="submit"
+        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        Next
+      </button>
+    }
   >
     <div className="px-4 py-6 sm:px-6 sm:divide-y sm:divide-gray-200">
-      <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+      <div className="space-y-6 sm:space-y-5">
         <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-gray-200 sm:pt-5">
           <label
             htmlFor="name"
