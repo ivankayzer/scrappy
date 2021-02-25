@@ -26,12 +26,12 @@ const Modal = ({
             <Transition
               appear
               show={open}
-              enter="transition-right duration-500"
-              enterFrom="-right-2xl"
-              leave="transition-right duration-500"
-              leaveFrom="right-0"
-              leaveTo="-right-2xl"
-              className="absolute inset-y-0 right-0 pl-10 max-w-full flex sm:pl-16 ease-in-out"
+              enter="transition-transform duration-500"
+              enterFrom="translate-x-2xl"
+              leave="transition-transform duration-500"
+              leaveFrom="translate-x-0"
+              leaveTo="translate-x-2xl"
+              className="absolute transform inset-y-0 right-0 pl-10 max-w-full flex sm:pl-16 ease-in-out"
               as="section"
             >
               <div

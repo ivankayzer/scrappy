@@ -11,8 +11,8 @@ module.exports = {
       transitionProperty: {
         right: "right",
       },
-      inset: {
-        "-2xl": "-42rem",
+      spacing: {
+        "2xl": "42rem",
       },
     },
   },

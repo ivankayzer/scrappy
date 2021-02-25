@@ -132,37 +132,28 @@ const ManageTask = ({ close }) => (
                   </span>
                 </button>
 
-                <Transition
-                  show
-                  leaveFrom="transition ease-in duration-100"
-                  leave="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
-                    <ul
-                      tabIndex="-1"
-                      role="listbox"
-                      aria-labelledby="listbox-label"
-                      aria-activedescendant="listbox-item-3"
-                      className="max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
+                  <ul
+                    tabIndex="-1"
+                    role="listbox"
+                    aria-labelledby="listbox-label"
+                    aria-activedescendant="listbox-item-3"
+                    className="max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                  >
+                    <li
+                      id="listbox-option-0"
+                      className="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9"
                     >
-                      <li
-                        id="listbox-option-0"
-                        className="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9"
-                      >
-                        <span className="flex truncate items-center">
-                          <span
-                            className="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"
-                            aria-hidden="true"
-                          />
-                          <span className="ml-3 font-normal block">
-                            Inactive
-                          </span>
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-                </Transition>
+                      <span className="flex truncate items-center">
+                        <span
+                          className="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"
+                          aria-hidden="true"
+                        />
+                        <span className="ml-3 font-normal block">Inactive</span>
+                      </span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -205,36 +196,28 @@ const ManageTask = ({ close }) => (
                   </span>
                 </button>
 
-                <Transition
-                  leaveFrom="transition ease-in duration-100"
-                  leave="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
-                    <ul
-                      tabIndex="-1"
-                      role="listbox"
-                      aria-labelledby="listbox-label"
-                      aria-activedescendant="listbox-item-3"
-                      className="max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
+                  <ul
+                    tabIndex="-1"
+                    role="listbox"
+                    aria-labelledby="listbox-label"
+                    aria-activedescendant="listbox-item-3"
+                    className="max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                  >
+                    <li
+                      id="listbox-option-0"
+                      className="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9"
                     >
-                      <li
-                        id="listbox-option-0"
-                        className="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9"
-                      >
-                        <span className="flex truncate items-center">
-                          <span
-                            className="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"
-                            aria-hidden="true"
-                          />
-                          <span className="ml-3 font-normal block">
-                            Inactive
-                          </span>
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-                </Transition>
+                      <span className="flex truncate items-center">
+                        <span
+                          className="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"
+                          aria-hidden="true"
+                        />
+                        <span className="ml-3 font-normal block">Inactive</span>
+                      </span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
