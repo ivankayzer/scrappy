@@ -28,7 +28,7 @@ const Tasks = () => {
     <div className="h-screen flex flex-col">
       <MobileNavigation />
       <div className="min-h-0 flex-1 flex md:overflow-hidden">
-        <Sidebar user />
+        <Sidebar user={{ email: "ivankayzer@gmail.com" }} />
 
         {!tasks.length && fetchState === "LOADED" ? (
           <EmptyState onActionClick={() => showManageModal(true)} />

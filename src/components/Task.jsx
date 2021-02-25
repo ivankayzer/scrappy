@@ -67,7 +67,7 @@ export const taskPropTypes = {
   lastChecked: PropTypes.string.isRequired,
   checkFrequency: PropTypes.string.isRequired,
   notificationChannel: PropTypes.string.isRequired,
-  isSelected: PropTypes.bool.isRequired,
+  isSelected: PropTypes.bool,
   isActive: PropTypes.bool.isRequired,
   needsAttention: PropTypes.bool.isRequired,
   onClick: PropTypes.func,
@@ -77,6 +77,7 @@ Task.propTypes = taskPropTypes;
 
 Task.defaultProps = {
   onClick: () => {},
+  isSelected: false,
 };
 
 export default Task;

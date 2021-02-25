@@ -24,7 +24,9 @@ const TaskDetails = ({
               </div>
             </div>
             <div className="pt-1.5">
-              <h1 className="text-3xl font-extrabold text-gray-900 uppercase">{name}</h1>
+              <h1 className="text-3xl font-extrabold text-gray-900 uppercase">
+                {name}
+              </h1>
               <p className="text-sm text-gray-400 max-w-lg h-10">
                 <a href="#">{url}</a>
               </p>
@@ -94,12 +96,12 @@ const TaskDetails = ({
               >
                 {events.map((event, i) => (
                   <Event
+                    key={event.id}
                     name={event.name}
                     subtext={event.subtext}
                     changes={event.changes}
                     color={event.color}
                     timestamp={event.timestamp}
-                    key={event.id}
                     isLast={i === events.length - 1}
                   />
                 ))}
@@ -231,7 +233,7 @@ TaskDetails.propTypes = {
   checkFrequency: PropTypes.string.isRequired,
   notificationChannel: PropTypes.string.isRequired,
   lastChecked: PropTypes.string.isRequired,
-  events: PropTypes.arrayOf(eventPropTypes).isRequired,
+  events: PropTypes.arrayOf(PropTypes.shape(eventPropTypes)).isRequired,
 };
 
 export default TaskDetails;

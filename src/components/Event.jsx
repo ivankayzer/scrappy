@@ -62,7 +62,7 @@ const Event = ({
           {changes ? (
             <div className="mt-2 text-sm text-gray-600">
               {changes.map((change) => (
-                <div className="flex items-center">
+                <div key={change.old} className="flex items-center">
                   <span className="line-through">{change.old}</span>
                   <span className="mx-3">
                     <svg
@@ -92,15 +92,17 @@ const Event = ({
 );
 
 export const eventPropTypes = {
-  isLast: PropTypes.bool.isRequired,
+  isLast: PropTypes.bool,
   color: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   subtext: PropTypes.string,
   timestamp: PropTypes.string.isRequired,
-  changes: PropTypes.arrayOf({
-    old: PropTypes.string.isRequired,
-    new: PropTypes.string.isRequired,
-  }),
+  changes: PropTypes.arrayOf(
+    PropTypes.shape({
+      old: PropTypes.string.isRequired,
+      new: PropTypes.string.isRequired,
+    })
+  ),
   taskName: PropTypes.string,
 };
 
@@ -110,6 +112,7 @@ Event.defaultProps = {
   changes: [],
   subtext: null,
   taskName: null,
+  isLast: false,
 };
 
 export default Event;

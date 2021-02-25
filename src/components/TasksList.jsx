@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Transition } from "@headlessui/react";
 import Task, { taskPropTypes } from "./Task";
 
 const TasksList = ({
@@ -90,13 +91,11 @@ const TasksList = ({
                     </span>
                   </button>
 
-                  <transition
-                    enter-active-className="undefined"
-                    enter-className="undefined"
-                    enter-to-className="undefined"
-                    leave-active-className="transition ease-in duration-100"
-                    leave-className="opacity-100"
-                    leave-to-className="opacity-0"
+                  <Transition
+                    show
+                    leaveFrom="transition ease-in duration-100"
+                    leave="opacity-100"
+                    leaveTo="opacity-0"
                   >
                     <div className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg">
                       <ul
@@ -146,7 +145,7 @@ const TasksList = ({
                         </li>
                       </ul>
                     </div>
-                  </transition>
+                  </Transition>
                 </div>
               </div>
             </div>
@@ -157,6 +156,7 @@ const TasksList = ({
         <ul className="border-b border-gray-200 divide-y divide-gray-200">
           {tasks.map((task) => (
             <Task
+              key={task.id}
               onClick={() => setSelected(task)}
               isActive={task.isActive}
               needsAttention={task.needsAttention}
@@ -175,7 +175,7 @@ const TasksList = ({
 );
 
 TasksList.propTypes = {
-  tasks: PropTypes.arrayOf(taskPropTypes).isRequired,
+  tasks: PropTypes.arrayOf(PropTypes.shape(taskPropTypes)).isRequired,
   selectedId: PropTypes.number,
   setSelected: PropTypes.func.isRequired,
   openManageModal: PropTypes.func.isRequired,

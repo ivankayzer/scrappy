@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
 import PropTypes from "prop-types";
+import { Transition } from "@headlessui/react";
 import Modal from "../Modal";
 
 const ManageTask = ({ isOpen, close }) => (
@@ -132,13 +133,11 @@ const ManageTask = ({ isOpen, close }) => (
                   </span>
                 </button>
 
-                <transition
-                  enter-active-className="undefined"
-                  enter-className="undefined"
-                  enter-to-className="undefined"
-                  leave-active-className="transition ease-in duration-100"
-                  leave-className="opacity-100"
-                  leave-to-className="opacity-0"
+                <Transition
+                  show
+                  leaveFrom="transition ease-in duration-100"
+                  leave="opacity-100"
+                  leaveTo="opacity-0"
                 >
                   <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
                     <ul
@@ -164,7 +163,7 @@ const ManageTask = ({ isOpen, close }) => (
                       </li>
                     </ul>
                   </div>
-                </transition>
+                </Transition>
               </div>
             </div>
           </div>
@@ -207,13 +206,10 @@ const ManageTask = ({ isOpen, close }) => (
                   </span>
                 </button>
 
-                <transition
-                  enter-active-className="undefined"
-                  enter-className="undefined"
-                  enter-to-className="undefined"
-                  leave-active-className="transition ease-in duration-100"
-                  leave-className="opacity-100"
-                  leave-to-className="opacity-0"
+                <Transition
+                  leaveFrom="transition ease-in duration-100"
+                  leave="opacity-100"
+                  leaveTo="opacity-0"
                 >
                   <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
                     <ul
@@ -239,7 +235,7 @@ const ManageTask = ({ isOpen, close }) => (
                       </li>
                     </ul>
                   </div>
-                </transition>
+                </Transition>
               </div>
             </div>
           </div>

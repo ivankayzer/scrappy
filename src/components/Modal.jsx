@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Transition } from "@headlessui/react";
 
 const Modal = ({
   wide,
@@ -23,13 +24,14 @@ const Modal = ({
               className="absolute inset-y-0 right-0 pl-10 max-w-full flex sm:pl-16"
               aria-labelledby="slide-over-heading"
             >
-              <transition
-                enter-active-class="transform transition ease-in-out duration-500 sm:duration-700"
-                enter-class="translate-x-full"
-                enter-to-class="translate-x-0"
-                leave-active-class="transform transition ease-in-out duration-500 sm:duration-700"
-                leave-class="translate-x-0"
-                leave-to-class="translate-x-full"
+              <Transition
+                show={isOpen}
+                enterFrom="transform transition ease-in-out duration-500 sm:duration-700"
+                enter="translate-x-full"
+                enterTo="translate-x-0"
+                leaveFrom="transform transition ease-in-out duration-500 sm:duration-700"
+                leave="translate-x-0"
+                leaveTo="translate-x-full"
               >
                 <div
                   className={`w-screen h-screen ${
@@ -124,7 +126,7 @@ const Modal = ({
                     </div>
                   </form>
                 </div>
-              </transition>
+              </Transition>
             </section>
           </div>
         </div>
@@ -141,12 +143,13 @@ Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  subTitle: PropTypes.string.isRequired,
+  subTitle: PropTypes.string,
   footerMeta: PropTypes.node,
   submit: PropTypes.node,
 };
 
 Modal.defaultProps = {
+  subTitle: "",
   wide: false,
   footerMeta: null,
   submit: null,

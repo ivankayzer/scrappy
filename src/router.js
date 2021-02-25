@@ -1,12 +1,14 @@
 const router = (() => {
   let events = [
     {
+      id: 1,
       name: "Page checked successfully",
       isImportant: false,
       timestamp: "15 minutes ago",
       color: "blue",
     },
     {
+      id: 2,
       name: "An error occurred during page check",
       subtext: "Trying to get property of non-object. #10193",
       isImportant: true,
@@ -14,12 +16,14 @@ const router = (() => {
       color: "red",
     },
     {
+      id: 3,
       name: "Notification sent to Telegram",
       isImportant: false,
       timestamp: "15 minutes ago",
       color: "blue",
     },
     {
+      id: 4,
       name: "Page content changed",
       changes: [
         {
@@ -32,6 +36,7 @@ const router = (() => {
       color: "green",
     },
     {
+      id: 5,
       name: "Page checked successfully",
       isImportant: false,
       timestamp: "15 minutes ago",
@@ -39,7 +44,11 @@ const router = (() => {
     },
   ];
 
-  events = [...events, ...events, ...events];
+  events = [
+    ...events,
+    ...events.map((e) => ({ ...e, id: e.id + 10 })),
+    ...events.map((e) => ({ ...e, id: e.id + 20 })),
+  ];
 
   const tasks = [
     {
