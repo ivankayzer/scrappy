@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MobileNavigation from "../components/MobileNavigation";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/nav/Sidebar";
 import router from "../router";
 import TaskDetails from "../components/TaskDetails";
 import TasksList from "../components/TasksList";
