@@ -2,7 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import Task, { taskPropTypes } from "./Task";
 
-const TasksList = ({ tasks, selectedId, setSelected, openManageModal }) => (
+const TasksList = ({
+  tasks,
+  selectedId,
+  setSelected,
+  openManageModal,
+  openManageScriptsModal,
+}) => (
   <aside className="hidden xl:block xl:flex-shrink-0 xl:order-first w-2/6">
     <div className="h-full relative flex flex-col w-full border-r border-gray-200 bg-gray-100">
       <div className="flex-shrink-0">
@@ -18,7 +24,12 @@ const TasksList = ({ tasks, selectedId, setSelected, openManageModal }) => (
             </div>
 
             <div>
-              <button type="button" onClick={openManageModal}>Add a task</button>
+              <button type="button" onClick={openManageModal}>
+                Add a task
+              </button>
+              <button type="button" onClick={openManageScriptsModal}>
+                Add task scripts
+              </button>
             </div>
           </div>
           <form className="mt-6 flex space-x-4" action="#">
@@ -168,6 +179,7 @@ TasksList.propTypes = {
   selectedId: PropTypes.number,
   setSelected: PropTypes.func.isRequired,
   openManageModal: PropTypes.func.isRequired,
+  openManageScriptsModal: PropTypes.func.isRequired,
 };
 
 TasksList.defaultProps = {

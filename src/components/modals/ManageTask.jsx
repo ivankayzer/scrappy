@@ -6,7 +6,7 @@ import Modal from "../Modal";
 const ManageTask = ({ isOpen, close }) => (
   <Modal
     wide
-    subTitle="Get started by filling in the information below to create your new task."
+    subTitle="Get started by filling in the information below to create your new task"
     isOpen={isOpen}
     close={close}
     title="Create a new task"

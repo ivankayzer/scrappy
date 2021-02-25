@@ -6,6 +6,7 @@ import TaskDetails from "../components/TaskDetails";
 import TasksList from "../components/TasksList";
 import ManageTask from "../components/modals/ManageTask";
 import EmptyState from "../components/EmptyState";
+import ManageTaskScripts from "../components/modals/ManageTaskScripts";
 
 const Tasks = () => {
   const [fetchState, setFetchState] = useState(null);
@@ -13,6 +14,7 @@ const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState(null);
 
   const [manageModal, showManageModal] = useState(false);
+  const [manageScriptsModal, showManageScriptsModal] = useState(false);
 
   useEffect(() => {
     router.get("/tasks").then((response) => {
@@ -45,6 +47,7 @@ const Tasks = () => {
 
             <TasksList
               openManageModal={() => showManageModal(true)}
+              openManageScriptsModal={() => showManageScriptsModal(true)}
               setSelected={(task) => setSelectedTask(task)}
               selectedId={selectedTask?.id}
               tasks={tasks}
@@ -54,6 +57,11 @@ const Tasks = () => {
       </div>
 
       <ManageTask close={() => showManageModal(false)} isOpen={manageModal} />
+
+      <ManageTaskScripts
+        close={() => showManageScriptsModal(false)}
+        isOpen={manageScriptsModal}
+      />
     </div>
   );
 };
