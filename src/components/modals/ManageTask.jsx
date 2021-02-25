@@ -4,11 +4,10 @@ import PropTypes from "prop-types";
 import { Transition } from "@headlessui/react";
 import Modal from "../Modal";
 
-const ManageTask = ({ isOpen, close }) => (
+const ManageTask = ({ close }) => (
   <Modal
     wide
     subTitle="Get started by filling in the information below to create your new task"
-    isOpen={isOpen}
     close={close}
     title="Create a new task"
     footerMeta={
@@ -285,7 +284,6 @@ const ManageTask = ({ isOpen, close }) => (
 );
 
 ManageTask.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
 };
 

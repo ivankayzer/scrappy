@@ -4,11 +4,7 @@ import router from "../../router";
 import Modal from "../Modal";
 import Event from "../Event";
 
-const Notifications = ({ isOpen, close }) => {
-  if (!isOpen) {
-    return null;
-  }
-
+const Notifications = ({ close }) => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -16,7 +12,7 @@ const Notifications = ({ isOpen, close }) => {
   }, []);
 
   return (
-    <Modal isOpen={isOpen} close={close} title="Notifications">
+    <Modal close={close} title="Notifications">
       <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
         <ul
           className="-mb-8 overflow-y-auto"
@@ -40,7 +36,6 @@ const Notifications = ({ isOpen, close }) => {
 };
 
 Notifications.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
 };
 

@@ -56,12 +56,11 @@ const Tasks = () => {
         )}
       </div>
 
-      <ManageTask close={() => showManageModal(false)} isOpen={manageModal} />
+      {manageModal && <ManageTask close={() => showManageModal(false)} />}
 
-      <ManageTaskScripts
-        close={() => showManageScriptsModal(false)}
-        isOpen={manageScriptsModal}
-      />
+      {manageScriptsModal && (
+        <ManageTaskScripts close={() => showManageScriptsModal(false)} />
+      )}
     </div>
   );
 };

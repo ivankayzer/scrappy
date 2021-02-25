@@ -69,14 +69,11 @@ const Sidebar = ({ user }) => {
         </div>
       </div>
 
-      <AccountSettings
-        close={() => setShowSettings(false)}
-        isOpen={showSettings}
-      />
-      <Notifications
-        close={() => setShowNotifications(false)}
-        isOpen={showNotifications}
-      />
+      {showSettings && <AccountSettings close={() => setShowSettings(false)} />}
+
+      {showNotifications && (
+        <Notifications close={() => setShowNotifications(false)} />
+      )}
     </nav>
   );
 };

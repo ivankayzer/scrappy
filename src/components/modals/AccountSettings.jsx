@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import Modal from "../Modal";
 
-const AccountSettings = ({ isOpen, close }) => (
-  <Modal isOpen={isOpen} close={close} title="Account settings">
+const AccountSettings = ({ close }) => (
+  <Modal close={close} title="Account settings">
     <div className="flex w-full items-center">
       <div className="md:mt-0 md:col-span-2 w-full">
         <div className="bg-white">
@@ -27,7 +27,6 @@ const AccountSettings = ({ isOpen, close }) => (
 );
 
 AccountSettings.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
 };
 

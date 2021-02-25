@@ -3,11 +3,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import Modal from "../Modal";
 
-const ManageTaskScripts = ({ isOpen, close }) => (
+const ManageTaskScripts = ({ close }) => (
   <Modal
     wide
     subTitle="Write scripts to execute on a page to get necessary data"
-    isOpen={isOpen}
     close={close}
     title="Add scripts to a task"
     footerMeta={
@@ -197,7 +196,6 @@ const ManageTaskScripts = ({ isOpen, close }) => (
 );
 
 ManageTaskScripts.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
 };
 

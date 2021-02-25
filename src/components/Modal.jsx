@@ -5,31 +5,34 @@ import { Transition } from "@headlessui/react";
 const Modal = ({
   wide,
   children,
-  isOpen,
   close,
   title,
   subTitle,
   footerMeta,
   submit,
 }) => {
-  if (!isOpen) {
-    return null;
-  }
+  const [open, setOpen] = useState(true);
+
+  const decoratedClose = () => {
+    setOpen(false);
+    setTimeout(close, 500);
+  };
+
   return (
     <>
-      <div className="bg-gray-100 z-20 absolute">
+      <div className="bg-gray-100 z-30 absolute">
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <Transition
               appear
-              show={isOpen}
-              enter="transition-right duration-300"
-              enterFrom="-right-80"
-              enterTo="right-0"
-              leave="transition-right duration-300"
+              show={open}
+              enter="transition-right duration-500"
+              enterFrom="-right-2xl"
+              leave="transition-right duration-500"
               leaveFrom="right-0"
-              leaveTo="-right-80"
-              className="absolute inset-y-0 pl-10 max-w-full flex sm:pl-16"
+              leaveTo="-right-2xl"
+              className="absolute inset-y-0 right-0 pl-10 max-w-full flex sm:pl-16 ease-in-out"
+              as="section"
             >
               <div
                 className={`w-screen h-screen ${
@@ -50,7 +53,7 @@ const Modal = ({
                         </div>
                         <div className="h-7 flex items-center">
                           <button
-                            onClick={close}
+                            onClick={decoratedClose}
                             type="button"
                             className="bg-transparent rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                           >
@@ -111,7 +114,7 @@ const Modal = ({
                     {footerMeta}
                     <div className="space-x-3 flex justify-end">
                       <button
-                        onClick={close}
+                        onClick={decoratedClose}
                         type="button"
                         className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
@@ -128,7 +131,7 @@ const Modal = ({
       </div>
       <Transition
         appear
-        show={isOpen}
+        show={open}
         enter="transition-opacity duration-200"
         enterFrom="opacity-0"
         enterTo="opacity-100"
@@ -136,7 +139,7 @@ const Modal = ({
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="bg-gray-500 absolute left-0 top-0 w-screen h-screen z-10 opacity-60" />
+        <div className="bg-gray-500 absolute left-0 top-0 w-screen h-screen z-20 opacity-60" />
       </Transition>
     </>
   );
@@ -145,7 +148,6 @@ const Modal = ({
 Modal.propTypes = {
   wide: PropTypes.bool,
   children: PropTypes.node.isRequired,
-  isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string,
