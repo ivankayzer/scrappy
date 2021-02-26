@@ -15,6 +15,10 @@ security:
             lazy: true
             provider: app_user_provider
 
+            guard:
+                authenticators:
+                    - App\Security\TelegramAuthenticator
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 

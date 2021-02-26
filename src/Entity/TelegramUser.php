@@ -28,8 +28,6 @@ class TelegramUser
 
     public static function createFromRequest(Request $request): self
     {
-        dd($request->request->get('id'), $request->getContent(), $request->request->all());
-
         return new self(
             $request->request->get('id'),
             $request->request->get('first_name'),
@@ -41,8 +39,15 @@ class TelegramUser
         );
     }
 
-    private function __construct(string $id, ?string $firstName, ?string $lastName, ?string $photoUrl, string $hash, string $authDate, string $username)
-    {
+    private function __construct(
+        string $id,
+        ?string $firstName,
+        ?string $lastName,
+        ?string $photoUrl,
+        string $hash,
+        string $authDate,
+        string $username
+    ) {
         $this->provider_id = $id;
         $this->first_name = $firstName;
         $this->last_name = $lastName;
@@ -50,70 +55,6 @@ class TelegramUser
         $this->hash = $hash;
         $this->auth_date = $authDate;
         $this->username = $username;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProviderId()
-    {
-        return $this->provider_id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProviderType(): string
-    {
-        return $this->provider_type;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFirstName()
-    {
-        return $this->first_name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLastName()
-    {
-        return $this->last_name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPhotoUrl()
-    {
-        return $this->photo_url;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getHash()
-    {
-        return $this->hash;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuthDate()
-    {
-        return $this->auth_date;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUsername()
-    {
-        return $this->username;
     }
 
     public function toHashCheckArray()
@@ -142,5 +83,69 @@ class TelegramUser
                 'max' => 64,
             ]),
         ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getProviderId(): string
+    {
+        return $this->provider_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProviderType(): string
+    {
+        return $this->provider_type;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFirstName(): ?string
+    {
+        return $this->first_name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastName(): ?string
+    {
+        return $this->last_name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhotoUrl(): ?string
+    {
+        return $this->photo_url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthDate(): string
+    {
+        return $this->auth_date;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
     }
 }

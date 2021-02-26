@@ -123,6 +123,7 @@ class User implements UserInterface
         return (string)$this->provider_id;
     }
 
+
     /**
      * @see UserInterface
      */
