@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\TelegramUser;
+use App\Dto\TelegramUser;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,26 +26,12 @@ class LoginController extends AbstractController
      */
     private $entityManager;
 
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var AuthenticationManagerInterface
-     */
-    private $authenticationManager;
-
     public function __construct(
         UserRepository $userRepository,
-        EntityManagerInterface $entityManager,
-        TokenStorageInterface $tokenStorage,
-        AuthenticationManagerInterface $authenticationManager
+        EntityManagerInterface $entityManager
     ) {
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
-        $this->tokenStorage = $tokenStorage;
-        $this->authenticationManager = $authenticationManager;
     }
 
     public function index()
@@ -74,10 +59,10 @@ class LoginController extends AbstractController
             return new Response('Validation failed', 422);
         }
 
-        return $this->loginOrCreateUser($user, $request);
+        return $this->loginOrCreateUser($user);
     }
 
-    private function loginOrCreateUser(TelegramUser $telegramUser, Request $request): Response
+    private function loginOrCreateUser(TelegramUser $telegramUser): Response
     {
         $user = $this->userRepository->findOneBy(['provider_id' => $telegramUser->getProviderId()]);
 
@@ -93,10 +78,6 @@ class LoginController extends AbstractController
             $this->entityManager->flush();
         }
 
-        $response = new RedirectResponse("/tasks");
-
-        $response->headers->setCookie(Cookie::create('provider_id', $telegramUser->getProviderId()));
-
-        return $response;
+        return new RedirectResponse("/tasks");
     }
 }
