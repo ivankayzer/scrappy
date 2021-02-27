@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Dto\TelegramUser;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\TelegramClient;
 use Doctrine\ORM\EntityManagerInterface;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,27 +41,41 @@ class LoginController extends AbstractController
         return $this->render('login.html.twig');
     }
 
-    public function login(Request $request, ValidatorInterface $validator): Response
+    public function connectTelegram(Request $request, TelegramClient $client): Response
     {
-        $user = TelegramUser::createFromRequest($request);
+        $client->setAsStateless();
 
-        $errors = $validator->validate($user);
+        try {
+            // the exact class depends on which provider you're using
+            /** @var \League\OAuth2\Client\Provider\FacebookUser $user */
+            $user = $client->fetchUser();
 
-        $dataToHash = collect($user->toHashCheckArray())
-            ->transform(function ($val, $key) {
-                return "$key=$val";
-            })
-            ->sort()
-            ->join("\n");
-
-        $hashKey = hash('sha256', '1261510074:AAH6Fi3jN7IsnQs2xj0eRXvd9k6iudCakRs', true);
-        $hashHmac = hash_hmac('sha256', $dataToHash, $hashKey);
-
-        if (count($errors) > 0 || $user->getHash() !== $hashHmac) {
-            return new Response('Validation failed', 422);
+            // do something with all this new power!
+            // e.g. $name = $user->getFirstName();
+            var_dump($user); die;
+            // ...
+        } catch (IdentityProviderException $e) {
+            // something went wrong!
+            // probably you should return the reason to the user
+            var_dump($e->getMessage()); die;
         }
-
-        return $this->loginOrCreateUser($user);
+//        $errors = $validator->validate($user);
+//
+//        $dataToHash = collect($user->toHashCheckArray())
+//            ->transform(function ($val, $key) {
+//                return "$key=$val";
+//            })
+//            ->sort()
+//            ->join("\n");
+//
+//        $hashKey = hash('sha256', '1261510074:AAH6Fi3jN7IsnQs2xj0eRXvd9k6iudCakRs', true);
+//        $hashHmac = hash_hmac('sha256', $dataToHash, $hashKey);
+//
+//        if (count($errors) > 0 || $user->getHash() !== $hashHmac) {
+//            return new Response('Validation failed', 422);
+//        }
+//
+//        return $this->loginOrCreateUser($user);
     }
 
     private function loginOrCreateUser(TelegramUser $telegramUser): Response
