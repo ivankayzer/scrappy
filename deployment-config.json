@@ -1,0 +1,11 @@
+[
+    {
+        "name": "ovh",
+        "ip": "51.38.130.218",
+        "username": "ubuntu",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "",
+        "path": "/var/www/scrappy"
+    }
+]
