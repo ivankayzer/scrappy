@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    <script src="https://telegram.org/js/telegram-widget.js" data-auth-url="@MarketplaceTrackerBot"
+            data-request-access="write"></script>
+    <script>
+        document.querySelector("#telegram-login").addEventListener("click", event => {
+            window.Telegram.Login.auth(
+                {bot_id: "1261510074:AAH6Fi3jN7IsnQs2xj0eRXvd9k6iudCakRs", request_access: true},
+                (data) => {
+                    if (!data) {
+                        console.error("authorization failed");
+                        return;
+                    }
+
+                    const formData = object => Object.keys(object).reduce((formData, key) => {
+                        formData.append(key, object[key]);
+                        return formData;
+                    }, new FormData());
+
+                    fetch("/login", {
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                        },
+                        method: "post",
+                        credentials: "same-origin",
+                        body: formData(data)
+                    }).then(response => {
+                        if (!response.redirected) {
+                            return;
+                        }
+                        window.location.href = response.url;
+                    });
+                }
+            );
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <button class="bg-black text-white px-5 py-3 rounded m-5" id="telegram-login" type="button">
+        Login with Telegram
+    </button>
+{% endblock %}

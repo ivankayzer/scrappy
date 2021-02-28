@@ -1,0 +1,22 @@
+index:
+    path: /
+    controller: App\Controller\HomeController::index
+    methods: GET
+
+login:
+    path: /login
+    controller: App\Controller\LoginController::index
+    methods: GET
+
+connect_telegram_check:
+    path: /login
+    methods: POST
+
+logout:
+    path: /logout
+    methods: GET
+
+tasks:
+    path: /tasks
+    controller: App\Controller\TasksController::index
+    methods: GET

@@ -1,25 +1,53 @@
 {
-  "name": "scrappy",
-  "version": "0.1.0",
-  "private": true,
   "dependencies": {
+    "@craco/craco": "^6.1.1",
+    "@headlessui/react": "^0.3.1",
+    "@tailwindcss/aspect-ratio": "^0.2.0",
+    "@tailwindcss/forms": "^0.2.1",
+    "@tailwindcss/typography": "^0.4.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "web-vitals": "^1.0.1"
   },
+  "devDependencies": {
+    "@babel/preset-react": "^7.12.13",
+    "@symfony/webpack-encore": "^1.0.0",
+    "@tailwindcss/postcss7-compat": "^2.0.3",
+    "autoprefixer": "^10.2.4",
+    "core-js": "^3.0.0",
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.5",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "postcss": "^8.1.9",
+    "postcss-import": "12.0.1",
+    "postcss-loader": "^5.0.0",
+    "prettier": "^2.2.1",
+    "regenerator-runtime": "^0.13.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "webpack-notifier": "^1.6.0"
+  },
+  "license": "MIT",
+  "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "eslint": "eslint src/",
-    "eslint:fix": "eslint --fix src/",
-    "prettier": "prettier --check src/",
-    "prettier:fix": "prettier --write src/"
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress",
+    "eslint": "eslint assets/",
+    "eslint:fix": "eslint --fix assets/",
+    "prettier": "prettier --check assets/",
+    "prettier:fix": "prettier --write assets/"
   },
   "eslintConfig": {
     "extends": [
@@ -38,16 +66,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "eslint": "^7.20.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.0.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.1.5",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "prettier": "^2.2.1"
   }
 }
