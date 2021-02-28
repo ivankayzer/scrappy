@@ -35,8 +35,9 @@ jobs:
 
     - name: Compile CSS and Javascript
       run: |
-        npm install
-        npm run dev
+        npm install -g yarn
+        yarn
+        yarn dev
 
     - name: Configure PHP 7.4
       uses: shivammathur/setup-php@master
