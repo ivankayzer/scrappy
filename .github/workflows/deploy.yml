@@ -22,14 +22,6 @@ jobs:
     - name: Composer install
       run: composer install --no-interaction --prefer-dist
 
-    - name: Run checks
-      run: |
-        composer phpcs-ci
-        composer psalm
-
-    - name: Run tests
-      run: composer tests
-
 
   create-deployment-artifacts:
     needs: run-checks
