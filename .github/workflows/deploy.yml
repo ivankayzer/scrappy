@@ -35,7 +35,7 @@ jobs:
 
     - name: Compile CSS and Javascript
       run: |
-        npm install -g yarn
+        sudo npm install -g yarn
         yarn
         yarn dev
 
