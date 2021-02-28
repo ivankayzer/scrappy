@@ -1,0 +1,62 @@
+version: "3.5"
+
+services:
+  php:
+    build:
+      context: "./php"
+      args:
+        uid: 1000
+    container_name: docker-container
+    volumes:
+      - .:/var/config
+      - ../:/var/www/html
+    ports:
+      - 80:80
+    environment:
+      - XDEBUG_CONFIG=remote_host=host.docker.internal
+      - APACHE_RUN_USER=#1000
+      - APACHE_RUN_GROUP=#1000
+    networks:
+      backend:
+        aliases:
+          - docker-container
+
+  mysql:
+    image: mariadb:10.3.28
+    container_name: mysql
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    command: mysqld --sql_mode=""
+    ports:
+      - 3306:3306
+    networks:
+      backend:
+        aliases:
+          - db
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    networks:
+      backend:
+        aliases:
+          - redis
+
+  ngrok:
+    image: wernight/ngrok:latest
+    ports:
+      - 4040:4040
+    environment:
+      NGROK_PROTOCOL: http
+      NGROK_PORT: docker-container:80
+    depends_on:
+      - php
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: backend-network
