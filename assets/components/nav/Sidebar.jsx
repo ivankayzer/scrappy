@@ -58,12 +58,12 @@ const Sidebar = ({ user }) => {
               >
                 <UserSettingsIcon />
               </button>
-              <button
-                type="button"
+              <a
+                href="/logout"
                 className="text-gray-400 hover:bg-gray-700 flex-shrink-0 inline-flex items-center justify-center h-14 w-14 rounded-lg"
               >
                 <LogoutIcon />
-              </button>
+              </a>
             </>
           )}
         </div>

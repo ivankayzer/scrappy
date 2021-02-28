@@ -120,7 +120,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->provider_id;
+        return sprintf('%s %s (%s)', $this->getFirstName(), $this->getLastName(), $this->getProviderId());
     }
 
 

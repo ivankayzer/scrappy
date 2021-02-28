@@ -10,8 +10,11 @@ login:
 
 connect_telegram_check:
     path: /login
-    controller: App\Controller\LoginController::connectTelegram
     methods: POST
+
+logout:
+    path: /logout
+    methods: GET
 
 tasks:
     path: /tasks
