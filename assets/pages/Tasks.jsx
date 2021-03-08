@@ -7,6 +7,7 @@ import TasksList from "../components/TasksList";
 import ManageTask from "../components/modals/ManageTask";
 import EmptyState from "../components/EmptyState";
 import ManageTaskScripts from "../components/modals/ManageTaskScripts";
+import axios from '../plugins/axios';
 
 const Tasks = () => {
   const [fetchState, setFetchState] = useState(null);
@@ -17,9 +18,10 @@ const Tasks = () => {
   const [manageScriptsModal, showManageScriptsModal] = useState(false);
 
   useEffect(() => {
-    router.get("/tasks").then((response) => {
-      setTasks(response);
-      setSelectedTask(response[0]);
+    axios.get("/tasks/all").then((response) => {
+      const { tasks } = response.data;
+      setTasks(tasks);
+      setSelectedTask(tasks[0]);
       setFetchState("LOADED");
     });
   }, []);
