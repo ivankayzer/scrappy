@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MobileNavigation from "../components/MobileNavigation";
 import Sidebar from "../components/nav/Sidebar";
-import router from "../router";
 import TaskDetails from "../components/TaskDetails";
 import TasksList from "../components/TasksList";
 import ManageTask from "../components/modals/ManageTask";
@@ -19,9 +18,9 @@ const Tasks = () => {
 
   useEffect(() => {
     axios.get("/tasks/all").then((response) => {
-      const { tasks } = response.data;
-      setTasks(tasks);
-      setSelectedTask(tasks[0]);
+      const tasksList = response.data.tasks;
+      setTasks(tasksList);
+      setSelectedTask(tasksList[0]);
       setFetchState("LOADED");
     });
   }, []);

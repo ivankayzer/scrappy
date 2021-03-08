@@ -6,7 +6,7 @@ use Spatie\Enum\Enum;
 
 /**
  *  @method static self active()
- *  @method static self disabled()
+ *  @method static self inactive()
  *  @method static self warning()
  */
 class TaskStatus extends Enum
@@ -15,7 +15,7 @@ class TaskStatus extends Enum
     {
         return [
             'active' => 1,
-            'disabled' => -1,
+            'inactive' => -1,
             'warning' => 2,
         ];
     }
