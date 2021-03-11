@@ -6,7 +6,7 @@ import TasksList from "../components/TasksList";
 import ManageTask from "../components/modals/ManageTask";
 import EmptyState from "../components/EmptyState";
 import ManageTaskScripts from "../components/modals/ManageTaskScripts";
-import axios from '../plugins/axios';
+import axios from "../plugins/axios";
 
 const Tasks = () => {
   const [fetchState, setFetchState] = useState(null);
@@ -57,7 +57,15 @@ const Tasks = () => {
         )}
       </div>
 
-      {manageModal && <ManageTask close={() => showManageModal(false)} />}
+      {manageModal && (
+        <ManageTask
+          next={() => {
+            showManageModal(false);
+            showManageScriptsModal(true);
+          }}
+          close={() => showManageModal(false)}
+        />
+      )}
 
       {manageScriptsModal && (
         <ManageTaskScripts close={() => showManageScriptsModal(false)} />

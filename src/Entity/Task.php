@@ -76,9 +76,16 @@ class Task
      */
     private $last_checked;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TaskExecutionHistory::class, mappedBy="task")
+     */
+    private $taskExecutionHistories;
+
     public function __construct()
     {
         $this->scripts = new ArrayCollection();
+        $this->created_at = new \DateTime();
+        $this->taskExecutionHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,7 +134,7 @@ class Task
         return new TaskStatus($this->status);
     }
 
-    public function setStatus(bool $status): self
+    public function setStatus($status): self
     {
         $this->status = $status;
 
@@ -232,6 +239,36 @@ class Task
     public function setLastChecked(?\DateTimeInterface $last_checked): self
     {
         $this->last_checked = $last_checked;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TaskExecutionHistory[]
+     */
+    public function getTaskExecutionHistories(): Collection
+    {
+        return $this->taskExecutionHistories;
+    }
+
+    public function addTaskExecutionHistory(TaskExecutionHistory $taskExecutionHistory): self
+    {
+        if (!$this->taskExecutionHistories->contains($taskExecutionHistory)) {
+            $this->taskExecutionHistories[] = $taskExecutionHistory;
+            $taskExecutionHistory->setTask($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaskExecutionHistory(TaskExecutionHistory $taskExecutionHistory): self
+    {
+        if ($this->taskExecutionHistories->removeElement($taskExecutionHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($taskExecutionHistory->getTask() === $this) {
+                $taskExecutionHistory->setTask(null);
+            }
+        }
 
         return $this;
     }

@@ -25,3 +25,8 @@ tasks_all:
     path: /tasks/all
     controller: App\Controller\TasksController::all
     methods: GET
+
+tasks_store:
+    path: /tasks
+    controller: App\Controller\TasksController::store
+    methods: PUT

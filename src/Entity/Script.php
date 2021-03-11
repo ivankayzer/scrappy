@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ScriptRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +44,16 @@ class Script
      * @ORM\Column(type="integer")
      */
     private $execution_order;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ScriptOutput::class, mappedBy="script")
+     */
+    private $scriptOutputs;
+
+    public function __construct()
+    {
+        $this->scriptOutputs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +116,36 @@ class Script
     public function setExecutionOrder(int $execution_order): self
     {
         $this->execution_order = $execution_order;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ScriptOutput[]
+     */
+    public function getScriptOutputs(): Collection
+    {
+        return $this->scriptOutputs;
+    }
+
+    public function addScriptOutput(ScriptOutput $scriptOutput): self
+    {
+        if (!$this->scriptOutputs->contains($scriptOutput)) {
+            $this->scriptOutputs[] = $scriptOutput;
+            $scriptOutput->setScript($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScriptOutput(ScriptOutput $scriptOutput): self
+    {
+        if ($this->scriptOutputs->removeElement($scriptOutput)) {
+            // set the owning side to null (unless already changed)
+            if ($scriptOutput->getScript() === $this) {
+                $scriptOutput->setScript(null);
+            }
+        }
 
         return $this;
     }

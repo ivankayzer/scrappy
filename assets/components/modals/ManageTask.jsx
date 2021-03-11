@@ -1,18 +1,29 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Transition } from "@headlessui/react";
 import Modal from "../Modal";
 import Select from "../Select";
 import Input from "../Input";
+import axios from '../../plugins/axios';
 
-const ManageTask = ({ close }) => {
+const ManageTask = ({ close, next }) => {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [status, setStatus] = useState("active");
   const [notificationChannel, setNotificationChannel] = useState("telegram");
-  const [checkFrequency, setCheckFrequency] = useState(5);
+  const [checkFrequency, setCheckFrequency] = useState(300);
   const [hoursOfActivity, setHoursOfActivity] = useState(null);
+
+  const submit = () => {
+    axios.put('/tasks', {
+      name,
+      url,
+      status,
+      notificationChannel,
+      checkFrequency,
+      hoursOfActivity,
+    }).then(next);
+  };
 
   return (
     <Modal
@@ -54,7 +65,8 @@ const ManageTask = ({ close }) => {
       }
       submit={
         <button
-          type="submit"
+          onClick={submit}
+          type="button"
           className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Next
@@ -64,26 +76,23 @@ const ManageTask = ({ close }) => {
       <div className="px-4 py-6 sm:px-6 sm:divide-y sm:divide-gray-200">
         <div className="space-y-6 sm:space-y-5">
           <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-gray-200 sm:pt-5">
-            <Input onValueChange={setName} value={name} name="name" label="Name" placeholder="Playstation 5" />
+            <Input
+              onValueChange={setName}
+              value={name}
+              name="name"
+              label="Name"
+              placeholder="Playstation 5"
+            />
           </div>
           <div className="sm:grid sm:border-t sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-gray-200 sm:pt-5">
-            <label
-              htmlFor="url"
-              className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-            >
-              URL
-            </label>
-            <div className="mt-1 sm:mt-0 sm:col-span-2">
-              <div className="w-full flex rounded-md shadow-sm">
-                <input
-                  type="text"
-                  name="url"
-                  id="url"
-                  placeholder="https://www.playstation.com/en-us/ps5/"
-                  className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-300"
-                />
-              </div>
-            </div>
+            <Input
+              value={url}
+              onValueChange={setUrl}
+              name="url"
+              id="url"
+              label="URL"
+              placeholder="https://www.playstation.com/en-us/ps5/"
+            />
           </div>
           <div className="sm:grid sm:border-t sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-gray-200 sm:pt-5">
             <label
@@ -117,6 +126,8 @@ const ManageTask = ({ close }) => {
                       ),
                     },
                   ]}
+                  value={status}
+                  onCHange={setStatus}
                 />
               </div>
             </div>
@@ -137,48 +148,31 @@ const ManageTask = ({ close }) => {
                       label: "Telegram",
                     },
                   ]}
+                  value={notificationChannel}
+                  onChange={setNotificationChannel}
                 />
               </div>
             </div>
           </div>
           <div className="sm:grid sm:border-t sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-gray-200 sm:pt-5">
-            <label
-              htmlFor="check_frequency"
-              className="text-sm font-medium text-gray-700 sm:mt-px flex flex-col"
-            >
-              Check frequency
-              <span className="text-xs text-gray-400">in seconds</span>
-            </label>
-            <div className="mt-1 sm:mt-0 sm:col-span-2">
-              <div className="w-full flex rounded-md shadow-sm">
-                <input
-                  type="number"
-                  name="check_frequency"
-                  id="check_frequency"
-                  placeholder="5"
-                  className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-300"
-                />
-              </div>
-            </div>
+            <Input
+              label="Check frequency"
+              subLabel="in seconds"
+              type="number"
+              name="check_frequency"
+              placeholder="300"
+              value={checkFrequency}
+              onValueChange={setCheckFrequency}
+            />
           </div>
           <div className="sm:grid sm:border-t sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-gray-200 sm:pt-5">
-            <label
-              htmlFor="hours_of_activity"
-              className="text-sm font-medium text-gray-700 sm:mt-px flex flex-col sm:pt-2"
-            >
-              Hours of activity
-            </label>
-            <div className="mt-1 sm:mt-0 sm:col-span-2">
-              <div className="w-full flex rounded-md shadow-sm">
-                <input
-                  type="text"
-                  name="hours_of_activity"
-                  id="hours_of_activity"
-                  placeholder="9-17 or 13,14,17"
-                  className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-300"
-                />
-              </div>
-            </div>
+            <Input
+              name="hours_of_activity"
+              label="Hours of activity"
+              placeholder="9-17 or 13,14,17"
+              value={hoursOfActivity}
+              onValueChange={setHoursOfActivity}
+            />
           </div>
         </div>
       </div>
@@ -188,6 +182,7 @@ const ManageTask = ({ close }) => {
 
 ManageTask.propTypes = {
   close: PropTypes.func.isRequired,
+  next: PropTypes.func.isRequired,
 };
 
 export default ManageTask;

@@ -57,4 +57,13 @@ class TaskRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findNeverRun()
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.last_checked is null')
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

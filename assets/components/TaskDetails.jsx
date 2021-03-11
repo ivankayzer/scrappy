@@ -27,7 +27,7 @@ const TaskDetails = ({
               <h1 className="text-3xl font-extrabold text-gray-900 uppercase">
                 {name}
               </h1>
-              <p className="text-sm text-gray-400 max-w-lg h-10">
+              <p className="text-sm text-gray-400 max-w-lg break-words">
                 <a href="#">{url}</a>
               </p>
               <div className="mt-5 flex text-gray-500 text-sm space-x-20">

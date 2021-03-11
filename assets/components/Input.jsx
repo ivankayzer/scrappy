@@ -9,6 +9,7 @@ const Input = ({
   placeholder,
   type,
   label,
+  subLabel,
 }) => {
   const decoratedOnChange = (e) => {
     onChange(e);
@@ -20,9 +21,12 @@ const Input = ({
       {label && (
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+          className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 flex flex-col"
         >
           {label}
+          {subLabel && (
+            <span className="text-xs text-gray-400">{subLabel}</span>
+          )}
         </label>
       )}
 
@@ -51,12 +55,14 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   type: PropTypes.string,
   label: PropTypes.string,
+  subLabel: PropTypes.string,
 };
 
 Input.defaultProps = {
   placeholder: "",
   type: "text",
   label: null,
+  subLabel: null,
   onChange: () => {},
   onValueChange: () => {},
 };
