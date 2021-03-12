@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:7.4-apache
 
 RUN apt-get update
 
@@ -55,11 +55,15 @@ RUN apt-get install -y \
     libxtst6 \
     lsb-release \
     wget \
-    xdg-utils
+    xdg-utils \
+    librabbitmq-dev \
+    libssh-dev
 
 RUN a2enmod rewrite headers
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+RUN pecl install amqp
 
 RUN docker-php-ext-install \
     bz2 \
@@ -73,7 +77,8 @@ RUN docker-php-ext-install \
     pcntl \
     sockets \
     gd \
-    zip
+    zip \
+    amqp
 
 RUN pecl install xdebug-3.0.1
 RUN docker-php-ext-enable xdebug

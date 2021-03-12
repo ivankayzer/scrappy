@@ -57,6 +57,13 @@ services:
     networks:
       - backend
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+    networks:
+      - backend
+
 networks:
   backend:
     name: backend-network
