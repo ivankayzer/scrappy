@@ -53,7 +53,6 @@ class TaskRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->andWhere('t.user = :val')
             ->setParameter('val', $userId)
-            ->orderBy('t.id', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -62,7 +61,15 @@ class TaskRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.last_checked is null')
-            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findWaitingForCheck()
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.check_frequency > 0')
+            ->andWhere("DATE_ADD(t.last_checked, t.check_frequency, 'SECOND') < CURRENT_TIMESTAMP()")
             ->getQuery()
             ->getResult();
     }

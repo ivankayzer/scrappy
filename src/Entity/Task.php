@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enums\TaskStatus;
 use App\Repository\TaskRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -271,5 +272,12 @@ class Task
         }
 
         return $this;
+    }
+
+    public function finish()
+    {
+        $this->setLastChecked(
+            new DateTime()
+        );
     }
 }

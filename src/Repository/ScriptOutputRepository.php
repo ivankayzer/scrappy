@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Script;
 use App\Entity\ScriptOutput;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,4 +48,15 @@ class ScriptOutputRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findPrevious(Script $script): ?ScriptOutput
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.script = :val')
+            ->orderBy('s.id', 'DESC')
+            ->setParameter('val', $script)
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult();
+    }
 }

@@ -33,6 +33,10 @@ services:
         arguments:
             $telegramToken: '%app.telegram.bot_token%'
 
+    App\Command\RunCron:
+        arguments:
+            $telegramToken: '%app.telegram.bot_token%'
+
 
     GuzzleHttp\Client:
     # add more service definitions when explicit configuration is needed

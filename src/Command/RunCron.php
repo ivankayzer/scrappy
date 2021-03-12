@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\ScriptOutput;
 use App\Entity\Task;
 use App\Entity\TaskExecutionHistory;
 use App\Repository\TaskRepository;
@@ -12,27 +13,31 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TelegramBot\Api\BotApi;
 
 class RunCron extends Command
 {
     protected static $defaultName = 'cron:run';
 
-    /**
-     * @var TaskRepository
-     */
-    private TaskRepository $taskRepository;
+    private EntityManagerInterface $entityManager;
 
-    /**
-     * @var Client
-     */
     private Client $guzzle;
 
-    public function __construct(string $name = null, EntityManagerInterface $entityManager, Client $guzzle)
+    private BotApi $bot;
+
+    public function __construct(string $name = null, EntityManagerInterface $entityManager, string $telegramToken)
     {
         parent::__construct($name);
 
-        $this->taskRepository = $taskRepository;
-        $this->guzzle = $guzzle;
+        $this->entityManager = $entityManager;
+
+        $this->guzzle = new Client([
+            'headers' => [
+                'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
+            ]
+        ]);
+
+        $this->bot = new BotApi($telegramToken);
     }
 
     protected function configure()
@@ -43,7 +48,7 @@ class RunCron extends Command
             'interval',
             InputArgument::OPTIONAL,
             'Interval to run event loop',
-            1
+            5
         );
     }
 
@@ -52,22 +57,56 @@ class RunCron extends Command
         $loop = Factory::create();
 
         $loop->addPeriodicTimer($input->getArgument('interval'), function () {
-            $tasks = $this->taskRepository->findNeverRun();
+            echo "SCANNING" . PHP_EOL;
+
+            $taskRepository = $this->entityManager->getRepository(Task::class);
+
+            $tasks = array_merge(
+                $taskRepository->findNeverRun(),
+                $taskRepository->findWaitingForCheck(),
+            );
 
             foreach ($tasks as $task) {
                 /** @var Task $task */
+                echo "EXECUTING TASK: " . $task->getName() . PHP_EOL;
                 $scripts = $task->getScripts();
 
                 $executionHistory = new TaskExecutionHistory();
+                $executionHistory->setTask($task);
 
                 foreach ($scripts as $script) {
+                    echo "EXECUTING SCRIPT: " . $script->getId() . PHP_EOL;
                     if ($script->getType() === 'snapshot') {
-                        $response = $this->guzzle->get($task->getUrl());
+                        /** @var ScriptOutput|null $previousOutput */
+                        $previousOutput = $this->entityManager
+                            ->getRepository(ScriptOutput::class)
+                            ->findPrevious($script);
 
-                        dd($response->getBody()->getContents());
+                        $output = new ScriptOutput();
+                        $output->setExecutionHistory($executionHistory);
+                        $output->setScript($script);
+
+                        $response = $this->guzzle->get($task->getUrl());
+                        $newOutput = $response->getBody()->getContents();
+
+                        if (!$previousOutput || $previousOutput->getOutput() !== $newOutput) {
+                            echo "FOUND CHANGES. NOTIFYING" . PHP_EOL;
+                            $output->setOutput($newOutput);
+                            $this->bot->sendMessage($task->getUser()->getProviderId(), 'Changed: ' . $task->getName());
+                        }
+
+                        $this->entityManager->persist($output);
                     }
                 }
+
+                $executionHistory->finish();
+                $task->finish();
+
+                $this->entityManager->persist($executionHistory);
+                $this->entityManager->persist($task);
             }
+
+            $this->entityManager->flush();
         });
 
         $loop->run();

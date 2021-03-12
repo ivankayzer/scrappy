@@ -26,18 +26,24 @@ class TaskExecutionHistory
     private $task;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $executed_at;
-
-    /**
      * @ORM\OneToMany(targetEntity=ScriptOutput::class, mappedBy="execution_history")
      */
     private $scriptOutputs;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $started_at;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $executed_at;
+
     public function __construct()
     {
         $this->scriptOutputs = new ArrayCollection();
+        $this->started_at = new \DateTime();
     }
 
     public function getId(): ?int
@@ -53,18 +59,6 @@ class TaskExecutionHistory
     public function setTask(?Task $task): self
     {
         $this->task = $task;
-
-        return $this;
-    }
-
-    public function getExecutedAt(): ?\DateTimeInterface
-    {
-        return $this->executed_at;
-    }
-
-    public function setExecutedAt(\DateTimeInterface $executed_at): self
-    {
-        $this->executed_at = $executed_at;
 
         return $this;
     }
@@ -97,5 +91,36 @@ class TaskExecutionHistory
         }
 
         return $this;
+    }
+
+    public function getStartedAt(): ?\DateTimeInterface
+    {
+        return $this->started_at;
+    }
+
+    public function setStartedAt(\DateTimeInterface $started_at): self
+    {
+        $this->started_at = $started_at;
+
+        return $this;
+    }
+
+    public function getExecutedAt(): ?\DateTimeInterface
+    {
+        return $this->executed_at;
+    }
+
+    public function setExecutedAt(?\DateTimeInterface $executed_at): self
+    {
+        $this->executed_at = $executed_at;
+
+        return $this;
+    }
+
+    public function finish(): void
+    {
+        $this->setExecutedAt(
+            new \DateTime()
+        );
     }
 }

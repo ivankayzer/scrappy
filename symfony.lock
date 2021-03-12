@@ -403,6 +403,9 @@
     "symfony/yaml": {
         "version": "v5.2.3"
     },
+    "telegram-bot/api": {
+        "version": "v2.3.22"
+    },
     "tightenco/collect": {
         "version": "v8.19.0"
     },
