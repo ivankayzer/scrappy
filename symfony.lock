@@ -1,4 +1,7 @@
 {
+    "clue/socket-raw": {
+        "version": "v1.5.0"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.1"
     },
@@ -98,6 +101,12 @@
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
+    },
+    "nesk/puphpeteer": {
+        "version": "2.0.0"
+    },
+    "nesk/rialto": {
+        "version": "1.4.0"
     },
     "nikic/php-parser": {
         "version": "v4.10.4"
@@ -263,6 +272,9 @@
     "symfony/polyfill-php80": {
         "version": "v1.22.1"
     },
+    "symfony/process": {
+        "version": "v5.2.4"
+    },
     "symfony/profiler-pack": {
         "version": "v1.0.5"
     },
@@ -414,5 +426,8 @@
     },
     "twig/twig": {
         "version": "v3.3.0"
+    },
+    "vierbergenlars/php-semver": {
+        "version": "3.0.2"
     }
 }
