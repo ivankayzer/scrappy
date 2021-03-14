@@ -6,7 +6,7 @@ use App\Entity\Script;
 
 interface ScriptExecutor
 {
-    public function execute();
+    public function execute(): string;
 
     public function setUrl(string $url): self;
 

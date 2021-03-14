@@ -5,6 +5,7 @@ namespace App\MessageHandler;
 use App\Entity\ScriptOutput;
 use App\Entity\Task;
 use App\Entity\TaskExecutionHistory;
+use App\Message\TaskChanged;
 use App\Message\TaskExecutionMessage;
 use App\Message\TelegramMessage;
 use App\ScriptExecution\ScriptExecutionFactory;
@@ -20,7 +21,11 @@ class ExecuteTask implements MessageHandlerInterface
 
     private ScriptExecutionFactory $scriptExecutionFactory;
 
-    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, ScriptExecutionFactory $scriptExecutionFactory)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        MessageBusInterface $bus,
+        ScriptExecutionFactory $scriptExecutionFactory
+    )
     {
         $this->entityManager = $entityManager;
         $this->bus = $bus;
@@ -37,6 +42,8 @@ class ExecuteTask implements MessageHandlerInterface
 
         $executionHistory = new TaskExecutionHistory();
         $executionHistory->setTask($task);
+
+        $taskChanged = false;
 
         foreach ($scripts as $script) {
             /** @var ScriptOutput|null $previousOutput */
@@ -55,22 +62,18 @@ class ExecuteTask implements MessageHandlerInterface
 
             if (!$previousOutput || $previousOutput->getOutput() !== $newOutput) {
                 $output->setOutput($newOutput);
-
-                $this->bus->dispatch(
-                    new TelegramMessage(
-                        $task->getUser()->getProviderId(),
-                        'Changed: ' . $task->getName()
-                    )
-                );
+                $taskChanged = true;
             }
 
             $this->entityManager->persist($output);
         }
 
         $executionHistory->finish();
-
         $this->entityManager->persist($executionHistory);
-
         $this->entityManager->flush();
+
+        if ($taskChanged) {
+            $this->bus->dispatch(new TaskChanged($task->getId()));
+        }
     }
 }

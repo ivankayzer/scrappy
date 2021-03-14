@@ -9,7 +9,7 @@ class Execute extends AbstractScriptExecutor
 {
     const TYPE = 'execute';
 
-    public function execute()
+    public function execute(): string
     {
         $browser = new Browser();
 

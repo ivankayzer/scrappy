@@ -15,7 +15,7 @@ class Snapshot extends AbstractScriptExecutor
         $this->guzzle = $guzzle;
     }
 
-    public function execute()
+    public function execute(): string
     {
         $response = $this->guzzle->get($this->url);
 

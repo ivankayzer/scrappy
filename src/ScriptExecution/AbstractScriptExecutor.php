@@ -10,7 +10,7 @@ abstract class AbstractScriptExecutor implements ScriptExecutor
 
     protected Script $script;
 
-    abstract public function execute();
+    abstract public function execute(): string;
 
     public function setUrl(string $url): ScriptExecutor
     {

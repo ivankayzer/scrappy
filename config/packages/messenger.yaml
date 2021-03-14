@@ -12,5 +12,5 @@ framework:
         routing:
             # Route your messages to the transports
             # 'App\Message\TaskExecutionMessage': async
-            # 'App\Message\TelegramMessage': async
+            # 'App\Message\TaskChanged': async
 
