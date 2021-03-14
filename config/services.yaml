@@ -29,6 +29,10 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    App\ScriptExecution\:
+        resource: '../src/ScriptExecution/'
+        tags: [ 'controller.service_arguments' ]
+
     App\Security\TelegramAuthenticator:
         arguments:
             $telegramToken: '%app.telegram.bot_token%'

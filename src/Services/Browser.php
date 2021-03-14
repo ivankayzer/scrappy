@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use Nesk\Puphpeteer\Puppeteer;
+use Nesk\Puphpeteer\Resources\Browser as NeskBrowser;
+use Nesk\Puphpeteer\Resources\Page;
 
 class Browser
 {
-    private $browser;
+    private NeskBrowser $browser;
 
     public function __construct()
     {
@@ -21,7 +23,7 @@ class Browser
         ]);
     }
 
-    public function createPage()
+    public function createPage(): Page
     {
         $page = $this->browser->newPage();
 
