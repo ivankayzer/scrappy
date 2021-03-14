@@ -21,7 +21,7 @@ class Script
 
     /**
      * @ORM\ManyToOne(targetEntity=Task::class, inversedBy="scripts")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $task;
 

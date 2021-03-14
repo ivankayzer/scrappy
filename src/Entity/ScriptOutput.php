@@ -19,6 +19,7 @@ class ScriptOutput
 
     /**
      * @ORM\ManyToOne(targetEntity=Script::class, inversedBy="scriptOutputs")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $script;
 
@@ -29,7 +30,7 @@ class ScriptOutput
 
     /**
      * @ORM\ManyToOne(targetEntity=TaskExecutionHistory::class, inversedBy="scriptOutputs")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $execution_history;
 

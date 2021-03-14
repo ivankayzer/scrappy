@@ -21,7 +21,7 @@ class TaskExecutionHistory
 
     /**
      * @ORM\ManyToOne(targetEntity=Task::class, inversedBy="taskExecutionHistories")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $task;
 
