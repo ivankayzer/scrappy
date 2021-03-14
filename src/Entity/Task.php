@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Task
 {
@@ -278,6 +279,18 @@ class Task
     {
         $this->setLastChecked(
             new DateTime()
+        );
+    }
+
+    /**
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->setUpdatedAt(
+            new \DateTime("now")
         );
     }
 }

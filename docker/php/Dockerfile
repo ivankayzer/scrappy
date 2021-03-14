@@ -77,11 +77,11 @@ RUN docker-php-ext-install \
     pcntl \
     sockets \
     gd \
-    zip \
-    amqp
+    zip
 
 RUN pecl install xdebug-3.0.1
 RUN docker-php-ext-enable xdebug
+RUN docker-php-ext-enable amqp
 
 RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/php.ini
 

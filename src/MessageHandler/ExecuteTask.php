@@ -70,9 +70,11 @@ class ExecuteTask implements MessageHandlerInterface
                 $page->addScriptTag(['url' => 'https://code.jquery.com/jquery-3.5.1.min.js']);
 
                 $page->goto($task->getUrl());
+
                 $newOutput = $page->evaluate(JsFunction::createWithBody("
-                            return document.innerHtml;
-                        "));
+                    return {$script->getCode()};
+                "));
+
                 $browser->close();
             }
 
