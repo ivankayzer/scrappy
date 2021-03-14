@@ -19,8 +19,6 @@ class Browser
                 '--disable-dev-shm-usage',
             ],
         ]);
-
-        dd($this->browser);
     }
 
     public function createPage()
