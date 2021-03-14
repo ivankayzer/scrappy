@@ -7,10 +7,8 @@ use App\Entity\Task;
 use App\Entity\TaskExecutionHistory;
 use App\Message\TaskExecutionMessage;
 use App\Message\TelegramMessage;
+use App\ScriptExecution\ScriptExecutionFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use GuzzleHttp\Client;
-use Nesk\Puphpeteer\Puppeteer;
-use Nesk\Rialto\Data\JsFunction;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -20,13 +18,13 @@ class ExecuteTask implements MessageHandlerInterface
 
     private MessageBusInterface $bus;
 
-    private Client $guzzle;
+    private ScriptExecutionFactory $scriptExecutionFactory;
 
-    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, Client $client)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, ScriptExecutionFactory $scriptExecutionFactory)
     {
         $this->entityManager = $entityManager;
         $this->bus = $bus;
-        $this->guzzle = $client;
+        $this->scriptExecutionFactory = $scriptExecutionFactory;
     }
 
     public function __invoke(TaskExecutionMessage $taskExecutionMessage)
@@ -50,33 +48,10 @@ class ExecuteTask implements MessageHandlerInterface
             $output->setExecutionHistory($executionHistory);
             $output->setScript($script);
 
-            if ($script->getType() === 'snapshot') {
-                $response = $this->guzzle->get($task->getUrl());
-                $newOutput = $response->getBody()->getContents();
-            } elseif ($script->getType() === 'execute') {
-                $puppeteer = new Puppeteer;
-
-                $browser = $puppeteer->launch([
-                    'args' => [
-                        '--no-sandbox',
-                        '--disable-setuid-sandbox',
-                        '--disable-dev-shm-usage',
-                    ],
-                ]);
-                $page = $browser->newPage();
-                $page->setViewport(['width' => 1366, 'height' => 768]);
-                $page->setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36');
-
-                $page->addScriptTag(['url' => 'https://code.jquery.com/jquery-3.5.1.min.js']);
-
-                $page->goto($task->getUrl());
-
-                $newOutput = $page->evaluate(JsFunction::createWithBody("
-                    return {$script->getCode()};
-                "));
-
-                $browser->close();
-            }
+            $newOutput = $this->scriptExecutionFactory->make($script->getType())
+                ->setUrl($task->getUrl())
+                ->setScript($script)
+                ->execute();
 
             if (!$previousOutput || $previousOutput->getOutput() !== $newOutput) {
                 $output->setOutput($newOutput);
