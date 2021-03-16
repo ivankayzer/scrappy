@@ -4,31 +4,51 @@ namespace App\Transformer;
 
 use App\Entity\Task;
 use App\Enums\TaskStatus;
+use Carbon\Carbon;
 
-class TaskTransformer implements TransformerInterface
+class TaskTransformer
 {
-    /**
-     * @var Task
-     */
-    private $task;
+    private TransformerManager $transformerManager;
 
-    public function __construct(Task $task)
+    public function __construct(TransformerManager $transformerManager)
     {
-        $this->task = $task;
+        $this->transformerManager = $transformerManager;
     }
 
-    public function transform(): array
+    public function transform(Task $task): array
     {
+        $events = $this->transformerManager->transformMany(
+            $task->getTaskExecutionHistories()->toArray()
+        );
+
         return [
-            'id' => $this->task->getId(),
-            'name' => $this->task->getName(),
-            'url' => $this->task->getUrl(),
-            'isActive' => $this->task->getStatus()->equals(TaskStatus::active()),
-            'lastChecked' => $this->task->getLastChecked(),
-            'checkFrequency' => $this->task->getCheckFrequency(),
-            'notificationChannel' => $this->task->getNotificationChannel(),
-            'needsAttention' => $this->task->getStatus()->equals(TaskStatus::warning()),
-            'events' => [],
+            'id' => $task->getId(),
+            'name' => $task->getName(),
+            'url' => $task->getUrl(),
+            'isActive' => $task->getStatus()->equals(TaskStatus::active()),
+            'lastChecked' => $this->formatDate($task->getLastChecked()),
+            'checkFrequency' => $this->formatFrequency($task->getCheckFrequency()),
+            'notificationChannel' => $task->getNotificationChannel(),
+            'needsAttention' => $task->getStatus()->equals(TaskStatus::warning()),
+            'events' => $events,
         ];
+    }
+
+    private function formatDate(?\DateTimeInterface $date): string
+    {
+        if (!$date) {
+            return "";
+        }
+
+        return Carbon::instance($date)->diffForHumans();
+    }
+
+    private function formatFrequency(?int $frequency): string
+    {
+        if (!$frequency) {
+            return "";
+        }
+
+        return sprintf('every %s seconds', $frequency);
     }
 }

@@ -7,7 +7,6 @@ use App\Entity\Task;
 use App\Entity\TaskExecutionHistory;
 use App\Message\TaskChanged;
 use App\Message\TaskExecutionMessage;
-use App\Message\TelegramMessage;
 use App\ScriptExecution\ScriptExecutionFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;

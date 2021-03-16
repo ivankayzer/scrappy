@@ -3,21 +3,30 @@
 namespace App\Transformer;
 
 use App\Entity\Task;
+use App\Entity\TaskExecutionHistory;
+use Psr\Container\ContainerInterface;
 
 class TransformerManager
 {
     public $dictionary = [
-        Task::class => TaskTransformer::class
+        Task::class => TaskTransformer::class,
+        TaskExecutionHistory::class => TaskExecutionHistoryTransformer::class,
     ];
+
+    private ContainerInterface $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     public function transform($entity): array
     {
         $transformerClass = $this->dictionary[get_class($entity)];
 
-        /** @var TransformerInterface $transformer */
-        $transformer = new $transformerClass($entity);
+        $transformer = $this->container->get($transformerClass);
 
-        return $transformer->transform();
+        return $transformer->transform($entity);
     }
 
     public function transformMany(array $entities): array
