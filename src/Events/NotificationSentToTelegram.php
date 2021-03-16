@@ -2,9 +2,9 @@
 
 namespace App\Events;
 
-class PageCheckedSuccessfully extends AbstractEvent
+class NotificationSentToTelegram extends AbstractEvent
 {
-    const ID = 'page-checked-successfully';
+    const ID = 'notification-sent-to-telegram';
 
     public function getColor(): string
     {
@@ -18,7 +18,7 @@ class PageCheckedSuccessfully extends AbstractEvent
 
     public function getName(): string
     {
-        return "Page checked successfully";
+        return "Notification sent to Telegram";
     }
 
     public function getDetails(): ?string

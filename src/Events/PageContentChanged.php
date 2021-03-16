@@ -2,23 +2,23 @@
 
 namespace App\Events;
 
-class PageCheckedSuccessfully extends AbstractEvent
+class PageContentChanged extends AbstractEvent
 {
-    const ID = 'page-checked-successfully';
+    const ID = 'page-content-changed';
 
     public function getColor(): string
     {
-        return "blue";
+        return "green";
     }
 
     public function getIsImportant(): bool
     {
-        return false;
+        return true;
     }
 
     public function getName(): string
     {
-        return "Page checked successfully";
+        return "Page content changed";
     }
 
     public function getDetails(): ?string
@@ -28,6 +28,11 @@ class PageCheckedSuccessfully extends AbstractEvent
 
     public function getChanges(): ?array
     {
-        return null;
+        return [
+            [
+                'old' => 'Price: 2499,00 PLN',
+                'new' => 'Price: 2799,00 PLN',
+            ]
+        ];
     }
 }

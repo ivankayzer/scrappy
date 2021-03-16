@@ -4,15 +4,15 @@ namespace App\Message;
 
 class TaskChanged
 {
-    private int $taskId;
+    private int $taskHistoryId;
 
-    public function __construct(int $taskId)
+    public function __construct(int $taskHistoryId)
     {
-        $this->taskId = $taskId;
+        $this->taskHistoryId = $taskHistoryId;
     }
 
-    public function getTaskId(): int
+    public function getTaskHistoryId(): int
     {
-        return $this->taskId;
+        return $this->taskHistoryId;
     }
 }

@@ -2,9 +2,14 @@
 
 namespace App\MessageHandler;
 
+use App\Dto\EventDescriptor;
 use App\Entity\ScriptOutput;
 use App\Entity\Task;
 use App\Entity\TaskExecutionHistory;
+use App\Events\ErrorDuringCheck;
+use App\Events\PageCheckedSuccessfully;
+use App\Events\PageContentChanged;
+use App\Message\EmmitEvent;
 use App\Message\TaskChanged;
 use App\Message\TaskExecutionMessage;
 use App\ScriptExecution\ScriptExecutionFactory;
@@ -54,10 +59,20 @@ class ExecuteTask implements MessageHandlerInterface
             $output->setExecutionHistory($executionHistory);
             $output->setScript($script);
 
-            $newOutput = $this->scriptExecutionFactory->make($script->getType())
-                ->setUrl($task->getUrl())
-                ->setScript($script)
-                ->execute();
+            try {
+                $newOutput = $this->scriptExecutionFactory->make($script->getType())
+                    ->setUrl($task->getUrl())
+                    ->setScript($script)
+                    ->execute();
+            } catch (\Exception $e) {
+                $this->bus->dispatch(new EmmitEvent(
+                    new EventDescriptor(
+                        $executionHistory->getId(),
+                        ErrorDuringCheck::ID,
+                        $e->getMessage()
+                    )
+                ));
+            }
 
             if (!$previousOutput || $previousOutput->getOutput() !== $newOutput) {
                 $output->setOutput($newOutput);
@@ -71,8 +86,21 @@ class ExecuteTask implements MessageHandlerInterface
         $this->entityManager->persist($executionHistory);
         $this->entityManager->flush();
 
+        $this->bus->dispatch(new EmmitEvent(
+            new EventDescriptor(
+                $executionHistory->getId(),
+                PageCheckedSuccessfully::ID
+            )
+        ));
+
         if ($taskChanged) {
-            $this->bus->dispatch(new TaskChanged($task->getId()));
+            $this->bus->dispatch(new TaskChanged($executionHistory->getId()));
+            $this->bus->dispatch(new EmmitEvent(
+                new EventDescriptor(
+                    $executionHistory->getId(),
+                    PageContentChanged::ID
+                )
+            ));
         }
     }
 }

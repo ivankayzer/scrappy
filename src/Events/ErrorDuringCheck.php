@@ -2,28 +2,28 @@
 
 namespace App\Events;
 
-class PageCheckedSuccessfully extends AbstractEvent
+class ErrorDuringCheck extends AbstractEvent
 {
-    const ID = 'page-checked-successfully';
+    const ID = 'error-during-check';
 
     public function getColor(): string
     {
-        return "blue";
+        return "red";
     }
 
     public function getIsImportant(): bool
     {
-        return false;
+        return true;
     }
 
     public function getName(): string
     {
-        return "Page checked successfully";
+        return "An error occurred during page check";
     }
 
     public function getDetails(): ?string
     {
-        return null;
+        return $this->event->getDetails();
     }
 
     public function getChanges(): ?array

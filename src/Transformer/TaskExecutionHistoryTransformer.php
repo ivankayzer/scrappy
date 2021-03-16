@@ -16,16 +16,17 @@ class TaskExecutionHistoryTransformer
 
     public function transform(TaskExecutionHistory $history): array
     {
+        $events = $this->transformerManager->transformMany(
+            $history->getEvents()->toArray()
+        );
+
         return [
             'id' => $history->getId(),
             'duration' => $this->calculateDuration(
                 $history->getStartedAt(),
                 $history->getExecutedAt()
             ),
-            'name' => 'Generic Event',
-            'isImportant' => false,
-            'timestamp' => $this->formatDate($history->getExecutedAt()),
-            'color' => 'blue',
+            'events' => $events,
         ];
     }
 

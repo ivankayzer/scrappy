@@ -17,7 +17,7 @@ class TaskTransformer
 
     public function transform(Task $task): array
     {
-        $events = $this->transformerManager->transformMany(
+        $history = $this->transformerManager->transformMany(
             $task->getTaskExecutionHistories()->toArray()
         );
 
@@ -30,7 +30,7 @@ class TaskTransformer
             'checkFrequency' => $this->formatFrequency($task->getCheckFrequency()),
             'notificationChannel' => $task->getNotificationChannel(),
             'needsAttention' => $task->getStatus()->equals(TaskStatus::warning()),
-            'events' => $events,
+            'history' => $history,
         ];
     }
 
