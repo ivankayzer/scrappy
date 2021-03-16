@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import router from "../../router";
 import Modal from "../Modal";
 import Event from "../Event";
+import axios from "../../plugins/axios";
 
 const Notifications = ({ close }) => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    router.get("/events").then((response) => setEvents(response));
+    axios
+      .get("/events/all")
+      .then((response) => setEvents(response.data.events));
   }, []);
 
   return (

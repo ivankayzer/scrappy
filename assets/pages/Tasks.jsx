@@ -42,7 +42,7 @@ const Tasks = () => {
                 checkFrequency={selectedTask.checkFrequency}
                 notificationChannel={selectedTask.notificationChannel}
                 lastChecked={selectedTask.lastChecked}
-                history={selectedTask.history}
+                events={selectedTask.events}
               />
             )}
 

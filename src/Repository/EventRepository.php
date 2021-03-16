@@ -47,4 +47,15 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findAllForUser(int $userId)
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.taskExecutionHistory', 'teh')
+            ->leftJoin('teh.task', 't')
+            ->andWhere('t.user = :val')
+            ->setParameter('val', $userId)
+            ->getQuery()
+            ->getResult();
+    }
 }

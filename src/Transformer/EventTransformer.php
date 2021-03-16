@@ -21,6 +21,7 @@ class EventTransformer
 
         return [
             'id' => $entity->getId(),
+            'taskName' => $entity->getTaskExecutionHistory()->getTask()->getName(),
             'name' => $event->getName(),
             'subtext' => $event->getDetails(),
             'isImportant' => $event->getIsImportant(),

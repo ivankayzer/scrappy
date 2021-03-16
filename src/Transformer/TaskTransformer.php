@@ -21,6 +21,14 @@ class TaskTransformer
             $task->getTaskExecutionHistories()->toArray()
         );
 
+        $historyEvents = array_map(function ($transformedHistory) {
+            return $transformedHistory['events'];
+        }, $history);
+
+        $mergedEvents = array_reduce($historyEvents, function ($array1, $array2) {
+            return array_merge($array1, $array2);
+        }, []);
+
         return [
             'id' => $task->getId(),
             'name' => $task->getName(),
@@ -30,7 +38,7 @@ class TaskTransformer
             'checkFrequency' => $this->formatFrequency($task->getCheckFrequency()),
             'notificationChannel' => $task->getNotificationChannel(),
             'needsAttention' => $task->getStatus()->equals(TaskStatus::warning()),
-            'history' => $history,
+            'events' => $mergedEvents,
         ];
     }
 

@@ -30,3 +30,8 @@ tasks_store:
     path: /tasks
     controller: App\Controller\TasksController::store
     methods: PUT
+
+events_all:
+    path: /events/all
+    controller: App\Controller\EventsController::all
+    methods: GET
