@@ -40,10 +40,16 @@ class TaskExecutionHistory
      */
     private $executed_at;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="taskExecutionHistory")
+     */
+    private $events;
+
     public function __construct()
     {
         $this->scriptOutputs = new ArrayCollection();
         $this->started_at = new \DateTime();
+        $this->events = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,5 +128,35 @@ class TaskExecutionHistory
         $this->setExecutedAt(
             new \DateTime()
         );
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setTaskExecutionHistory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getTaskExecutionHistory() === $this) {
+                $event->setTaskExecutionHistory(null);
+            }
+        }
+
+        return $this;
     }
 }
