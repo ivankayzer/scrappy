@@ -3,18 +3,17 @@ import MobileNavigation from "../components/MobileNavigation";
 import Sidebar from "../components/nav/Sidebar";
 import TaskDetails from "../components/TaskDetails";
 import TasksList from "../components/TasksList";
-import ManageTask from "../components/modals/ManageTask";
 import EmptyState from "../components/EmptyState";
-import ManageTaskScripts from "../components/modals/ManageTaskScripts";
 import axios from "../plugins/axios";
+import TaskManager from "../components/TaskManager";
 
 const Tasks = () => {
   const [fetchState, setFetchState] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
 
-  const [manageModal, showManageModal] = useState(false);
-  const [manageScriptsModal, showManageScriptsModal] = useState(false);
+  const [managedTaskId, setManagedTaskId] = useState(null);
+  const [isManagerOpen, setIsManagerOpen] = useState(false);
 
   useEffect(() => {
     axios.get("/tasks/all").then((response) => {
@@ -32,7 +31,7 @@ const Tasks = () => {
         <Sidebar user={{ email: "ivankayzer@gmail.com" }} />
 
         {!tasks.length && fetchState === "LOADED" ? (
-          <EmptyState onActionClick={() => showManageModal(true)} />
+          <EmptyState onActionClick={() => setIsManagerOpen(true)} />
         ) : (
           <main className="min-w-0 flex-1 border-t border-gray-200 xl:flex">
             {selectedTask && (
@@ -50,32 +49,31 @@ const Tasks = () => {
                   setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
                   setSelectedTask(task);
                 }}
+                openEditTask={(id) => {
+                  setManagedTaskId(id);
+                  setIsManagerOpen(true);
+                }}
               />
             )}
 
             <TasksList
-              openManageModal={() => showManageModal(true)}
-              openManageScriptsModal={() => showManageScriptsModal(true)}
               setSelected={(task) => setSelectedTask(task)}
               selectedId={selectedTask?.id}
               tasks={tasks}
+              openAddTask={() => {
+                setManagedTaskId(null);
+                setIsManagerOpen(true);
+              }}
             />
           </main>
         )}
       </div>
 
-      {manageModal && (
-        <ManageTask
-          next={() => {
-            showManageModal(false);
-            showManageScriptsModal(true);
-          }}
-          close={() => showManageModal(false)}
+      {isManagerOpen && (
+        <TaskManager
+          close={() => setIsManagerOpen(false)}
+          taskId={managedTaskId}
         />
-      )}
-
-      {manageScriptsModal && (
-        <ManageTaskScripts close={() => showManageScriptsModal(false)} />
       )}
     </div>
   );

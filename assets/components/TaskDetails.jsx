@@ -18,6 +18,7 @@ const TaskDetails = ({
   events,
   isActive,
   updateTask,
+  openEditTask,
 }) => {
   const filters = {
     all: () => true,
@@ -104,6 +105,7 @@ const TaskDetails = ({
                 {isActive ? "Active" : "Inactive"}
               </button>
               <button
+                onClick={() => openEditTask(id)}
                 type="button"
                 className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
               >
@@ -289,6 +291,7 @@ TaskDetails.propTypes = {
   lastChecked: PropTypes.string.isRequired,
   isActive: PropTypes.bool.isRequired,
   updateTask: PropTypes.func.isRequired,
+  openEditTask: PropTypes.func.isRequired,
   events: PropTypes.arrayOf(PropTypes.shape(eventPropTypes)).isRequired,
 };
 

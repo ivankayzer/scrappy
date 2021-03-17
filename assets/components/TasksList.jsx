@@ -7,7 +7,7 @@ const TasksList = ({
   tasks,
   selectedId,
   setSelected,
-  openManageModal,
+  openAddTask
 }) => {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -38,9 +38,9 @@ const TasksList = ({
 
               <div>
                 <button
-                    onClick={openManageModal}
-                    type="button"
-                    className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
+                  onClick={openAddTask}
+                  type="button"
+                  className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
                 >
                   Add a task
                 </button>
@@ -164,7 +164,7 @@ TasksList.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.shape(taskPropTypes)).isRequired,
   selectedId: PropTypes.number,
   setSelected: PropTypes.func.isRequired,
-  openManageModal: PropTypes.func.isRequired,
+  openAddTask: PropTypes.func.isRequired,
 };
 
 TasksList.defaultProps = {
