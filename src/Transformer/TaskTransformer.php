@@ -34,7 +34,7 @@ class TaskTransformer
             'name' => $task->getName(),
             'url' => $task->getUrl(),
             'isActive' => $task->getStatus()->equals(TaskStatus::active()),
-            'lastChecked' => $this->formatDate($task->getLastChecked()),
+            'lastChecked' => $this->formatLastChecked($task->getLastChecked()),
             'checkFrequency' => $this->formatFrequency($task->getCheckFrequency()),
             'notificationChannel' => $task->getNotificationChannel(),
             'needsAttention' => $task->getStatus()->equals(TaskStatus::warning()),
@@ -42,10 +42,10 @@ class TaskTransformer
         ];
     }
 
-    private function formatDate(?\DateTimeInterface $date): string
+    private function formatLastChecked(?\DateTimeInterface $date): string
     {
         if (!$date) {
-            return "";
+            return "not checked yet";
         }
 
         return Carbon::instance($date)->diffForHumans();

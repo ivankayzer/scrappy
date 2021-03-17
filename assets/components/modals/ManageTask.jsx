@@ -9,7 +9,7 @@ import axios from '../../plugins/axios';
 const ManageTask = ({ close, next }) => {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
-  const [status, setStatus] = useState("active");
+  const [status, setStatus] = useState(1);
   const [notificationChannel, setNotificationChannel] = useState("telegram");
   const [checkFrequency, setCheckFrequency] = useState(300);
   const [hoursOfActivity, setHoursOfActivity] = useState(null);
@@ -106,7 +106,7 @@ const ManageTask = ({ close, next }) => {
                 <Select
                   options={[
                     {
-                      value: "active",
+                      value: 1,
                       label: "Active",
                       icon: (
                         <span
@@ -116,7 +116,7 @@ const ManageTask = ({ close, next }) => {
                       ),
                     },
                     {
-                      value: "inactive",
+                      value: -1,
                       label: "Inactive",
                       icon: (
                         <span
