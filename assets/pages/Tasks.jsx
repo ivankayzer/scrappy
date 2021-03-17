@@ -43,6 +43,13 @@ const Tasks = () => {
                 notificationChannel={selectedTask.notificationChannel}
                 lastChecked={selectedTask.lastChecked}
                 events={selectedTask.events}
+                isActive={selectedTask.isActive}
+                needsAttention={selectedTask.needsAttention}
+                id={selectedTask.id}
+                updateTask={(task) => {
+                  setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
+                  setSelectedTask(task);
+                }}
               />
             )}
 

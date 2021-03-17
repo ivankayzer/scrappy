@@ -31,6 +31,11 @@ tasks_store:
     controller: App\Controller\TasksController::store
     methods: PUT
 
+tasks_change_status:
+    path: /tasks/{id}/status
+    controller: App\Controller\TasksController::changeStatus
+    methods: PATCH
+
 events_all:
     path: /events/all
     controller: App\Controller\EventsController::all

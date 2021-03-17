@@ -63,4 +63,19 @@ class TasksController extends AbstractController
             'task' => $this->transformerManager->transform($task)
         ]);
     }
+
+    public function changeStatus(int $id, Request $request): Response
+    {
+        $task = $this->taskRepository->find($id);
+
+        $task->setStatus($request->request->get('status'));
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($task);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'task' => $this->transformerManager->transform($task)
+        ]);
+    }
 }

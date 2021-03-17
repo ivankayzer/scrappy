@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Event, { eventPropTypes } from "./Event";
+import axios from "../plugins/axios";
 
 const filterActiveClass =
   "border-blue-500 bg-blue-600 text-sm font-medium text-white hover:bg-blue-600 focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
@@ -8,12 +9,15 @@ const filterClass =
   "border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
 
 const TaskDetails = ({
+  id,
   name,
   url,
   checkFrequency,
   notificationChannel,
   lastChecked,
   events,
+  isActive,
+  updateTask,
 }) => {
   const filters = {
     all: () => true,
@@ -22,7 +26,27 @@ const TaskDetails = ({
 
   const [filter, setFilter] = useState("important");
 
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+
   const callFilter = (event) => filters[filter](event);
+
+  const updateStatus = () => {
+    if (updatingStatus) {
+      return null;
+    }
+
+    setUpdatingStatus(true);
+    axios
+      .patch(`/tasks/${id}/status`, {
+        status: isActive ? -1 : 1,
+      })
+      .then((response) => {
+        updateTask(response.data.task);
+        setUpdatingStatus(false);
+      });
+
+    return null;
+  };
 
   return (
     <div className="flex flex-col w-full bg-white">
@@ -63,16 +87,19 @@ const TaskDetails = ({
             </div>
             <div className="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
               <button
+                onClick={updateStatus}
                 type="button"
                 className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
               >
                 <span className="flex-shrink-0 flex items-center justify-center mr-3">
                   <span
-                    className="h-1.5 w-1.5 rounded-full bg-green-500"
+                    className={`h-1.5 w-1.5 rounded-full ${
+                      isActive ? "bg-green-500" : "bg-red-500"
+                    }`}
                     aria-hidden="true"
                   />
                 </span>
-                Active
+                {isActive ? "Active" : "Inactive"}
               </button>
               <button
                 type="button"
@@ -252,11 +279,14 @@ const TaskDetails = ({
 };
 
 TaskDetails.propTypes = {
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   checkFrequency: PropTypes.string.isRequired,
   notificationChannel: PropTypes.string.isRequired,
   lastChecked: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  updateTask: PropTypes.func.isRequired,
   events: PropTypes.arrayOf(PropTypes.shape(eventPropTypes)).isRequired,
 };
 
