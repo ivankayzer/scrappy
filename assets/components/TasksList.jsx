@@ -11,6 +11,16 @@ const TasksList = ({
   openManageScriptsModal,
 }) => {
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("all");
+
+  const filters = {
+    all: () => true,
+    active: (task) => task.isActive,
+    needs_attention: (task) => task.needsAttention,
+    inactive: (task) => !task.isActive,
+  };
+
+  const filterByStatus = (task) => filters[status](task);
 
   return (
     <aside className="hidden xl:block xl:flex-shrink-0 xl:order-first w-2/6">
@@ -66,6 +76,7 @@ const TasksList = ({
                 </div>
                 <div className="ml-3 w-60">
                   <Select
+                    onChange={(e) => setStatus(e.value)}
                     options={[
                       {
                         value: "all",
@@ -92,7 +103,7 @@ const TasksList = ({
                         ),
                       },
                       {
-                        value: "needs_active",
+                        value: "needs_attention",
                         label: "Needs attention",
                         icon: (
                           <span className="bg-yellow-300 flex-shrink-0 inline-block h-2 w-2 rounded-full" />
@@ -127,6 +138,7 @@ const TasksList = ({
                   task.name.toLowerCase().includes(search.toLowerCase()) ||
                   task.url.toLowerCase().includes(search.toLowerCase())
               )
+              .filter(filterByStatus)
               .map((task) => (
                 <Task
                   key={task.id}
