@@ -67,7 +67,9 @@ const TaskDetails = ({
                   {name}
                 </h1>
                 <p className="text-sm text-gray-400 max-w-lg break-words">
-                  <a href="#">{url}</a>
+                  <a href={url} target="_blank" rel="noreferrer">
+                    {url}
+                  </a>
                 </p>
                 <div className="mt-5 flex text-gray-500 text-sm space-x-20">
                   <div>
