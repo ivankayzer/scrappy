@@ -8,12 +8,11 @@ const ValueIcon = ({ icon }) => (
   </div>
 );
 
-const Select = ({ onChange, options, selected }) => {
-  const [value, setValue] = useState(options[0]);
+const Select = ({ onChange, options, value }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const decoratedSetValue = (v) => {
-    setValue(v, onChange(v));
+    onChange(v);
     setIsOpen(false);
   };
 
@@ -93,16 +92,11 @@ const optionPropType = {
 Select.propTypes = {
   onChange: PropTypes.func,
   options: PropTypes.arrayOf(PropTypes.shape(optionPropType)).isRequired,
-  selected: PropTypes.oneOfType([
-    PropTypes.shape(optionPropType),
-    PropTypes.string,
-    PropTypes.number,
-  ]),
+  value: PropTypes.shape(optionPropType).isRequired,
 };
 
 Select.defaultProps = {
   onChange: () => {},
-  selected: null,
 };
 
 ValueIcon.propTypes = {

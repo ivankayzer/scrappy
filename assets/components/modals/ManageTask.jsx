@@ -6,14 +6,53 @@ import Select from "../Select";
 import Input from "../Input";
 import axios from "../../plugins/axios";
 
+const statusOptions = [
+  {
+    value: 1,
+    label: "Active",
+    icon: (
+      <span
+        className="bg-green-400 flex-shrink-0 inline-block h-2 w-2 rounded-full"
+        aria-hidden="true"
+      />
+    ),
+  },
+  {
+    value: -1,
+    label: "Inactive",
+    icon: (
+      <span
+        className="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"
+        aria-hidden="true"
+      />
+    ),
+  },
+];
+
+const notificationChannelOptions = [
+  {
+    value: "telegram",
+    label: "Telegram",
+  },
+];
+
 const ManageTask = ({ close, updateAndNext, addAndNext, task }) => {
   const [id, setId] = useState(task.id || null);
   const [name, setName] = useState(task.name || "");
   const [url, setUrl] = useState(task.url || "");
-  const [status, setStatus] = useState(task.rawStatus || 1);
-  const [notificationChannel, setNotificationChannel] = useState(
-    task.notificationChannel || "telegram"
+  const [status, setStatus] = useState(
+    task.rawStatus
+      ? statusOptions.find((so) => so.value === task.rawStatus)
+      : statusOptions[0]
   );
+  const [notificationChannel, setNotificationChannel] = useState(
+    task.notificationChannel
+      ? notificationChannelOptions.find(
+          (nco) => nco.value === task.notificationChannel
+        )
+      : notificationChannelOptions[0]
+  );
+
   const [checkFrequency, setCheckFrequency] = useState(
     task.checkFrequencyInSeconds || "300"
   );
@@ -25,8 +64,8 @@ const ManageTask = ({ close, updateAndNext, addAndNext, task }) => {
     const taskData = {
       name,
       url,
-      status,
-      notificationChannel,
+      status: status.value,
+      notificationChannel: notificationChannel.value,
       checkFrequency,
       hoursOfActivity,
     };
@@ -121,30 +160,9 @@ const ManageTask = ({ close, updateAndNext, addAndNext, task }) => {
             <div className="mt-1 sm:mt-0 sm:col-span-2 flex justify-center">
               <div className="w-full">
                 <Select
-                  options={[
-                    {
-                      value: 1,
-                      label: "Active",
-                      icon: (
-                        <span
-                          className="bg-green-400 flex-shrink-0 inline-block h-2 w-2 rounded-full"
-                          aria-hidden="true"
-                        />
-                      ),
-                    },
-                    {
-                      value: -1,
-                      label: "Inactive",
-                      icon: (
-                        <span
-                          className="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"
-                          aria-hidden="true"
-                        />
-                      ),
-                    },
-                  ]}
+                  options={statusOptions}
                   value={status}
-                  onCHange={setStatus}
+                  onChange={setStatus}
                 />
               </div>
             </div>
@@ -159,12 +177,7 @@ const ManageTask = ({ close, updateAndNext, addAndNext, task }) => {
             <div className="mt-1 sm:mt-0 sm:col-span-2 flex justify-center">
               <div className="w-full">
                 <Select
-                  options={[
-                    {
-                      value: "telegram",
-                      label: "Telegram",
-                    },
-                  ]}
+                  options={notificationChannelOptions}
                   value={notificationChannel}
                   onChange={setNotificationChannel}
                 />

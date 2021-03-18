@@ -3,14 +3,53 @@ import PropTypes from "prop-types";
 import Task, { taskPropTypes } from "./Task";
 import Select from "./Select";
 
-const TasksList = ({
-  tasks,
-  selectedId,
-  setSelected,
-  openAddTask
-}) => {
+const statusOptions = [
+  {
+    value: "all",
+    label: "All",
+    icon: (
+      <>
+        <span
+          className="bg-green-400 flex-shrink-0 inline-block h-2 w-2 rounded-full"
+          aria-hidden="true"
+        />
+        <span className="bg-yellow-400 flex-shrink-0 inline-block -ml-1 h-2 w-2 rounded-full" />
+        <span className="bg-gray-200 flex-shrink-0 inline-block -ml-1 h-2 w-2 rounded-full" />
+      </>
+    ),
+  },
+  {
+    value: "active",
+    label: "Active",
+    icon: (
+      <span
+        className="bg-green-400 flex-shrink-0 inline-block h-2 w-2 rounded-full"
+        aria-hidden="true"
+      />
+    ),
+  },
+  {
+    value: "needs_attention",
+    label: "Needs attention",
+    icon: (
+      <span className="bg-yellow-300 flex-shrink-0 inline-block h-2 w-2 rounded-full" />
+    ),
+  },
+  {
+    value: "inactive",
+    label: "Inactive",
+    icon: (
+      <span
+        className="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"
+        aria-hidden="true"
+      />
+    ),
+  },
+];
+
+const TasksList = ({ tasks, selectedId, setSelected, openAddTask }) => {
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("all");
+  const [status, setStatus] = useState(statusOptions[0]);
 
   const filters = {
     all: () => true,
@@ -19,7 +58,7 @@ const TasksList = ({
     inactive: (task) => !task.isActive,
   };
 
-  const filterByStatus = (task) => filters[status](task);
+  const filterByStatus = (task) => filters[status.value](task);
 
   return (
     <aside className="hidden xl:block xl:flex-shrink-0 xl:order-first w-2/6">
@@ -76,50 +115,9 @@ const TasksList = ({
                 </div>
                 <div className="ml-3 w-60">
                   <Select
-                    onChange={(e) => setStatus(e.value)}
-                    options={[
-                      {
-                        value: "all",
-                        label: "All",
-                        icon: (
-                          <>
-                            <span
-                              className="bg-green-400 flex-shrink-0 inline-block h-2 w-2 rounded-full"
-                              aria-hidden="true"
-                            />
-                            <span className="bg-yellow-400 flex-shrink-0 inline-block -ml-1 h-2 w-2 rounded-full" />
-                            <span className="bg-gray-200 flex-shrink-0 inline-block -ml-1 h-2 w-2 rounded-full" />
-                          </>
-                        ),
-                      },
-                      {
-                        value: "active",
-                        label: "Active",
-                        icon: (
-                          <span
-                            className="bg-green-400 flex-shrink-0 inline-block h-2 w-2 rounded-full"
-                            aria-hidden="true"
-                          />
-                        ),
-                      },
-                      {
-                        value: "needs_attention",
-                        label: "Needs attention",
-                        icon: (
-                          <span className="bg-yellow-300 flex-shrink-0 inline-block h-2 w-2 rounded-full" />
-                        ),
-                      },
-                      {
-                        value: "inactive",
-                        label: "Inactive",
-                        icon: (
-                          <span
-                            className="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"
-                            aria-hidden="true"
-                          />
-                        ),
-                      },
-                    ]}
+                    onChange={(e) => setStatus(e)}
+                    options={statusOptions}
+                    value={status}
                   />
                 </div>
               </div>
