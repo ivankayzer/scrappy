@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Modal from "../Modal";
 import Select from "../Select";
+import Execute from "../scriptTypes/Execute";
+import Snapshot from "../scriptTypes/Snapshot";
 
 const scriptOptions = [
   {
@@ -15,8 +17,23 @@ const scriptOptions = [
   },
 ];
 
+const scriptTypes = {
+  execute: Execute,
+  snapshot: Snapshot,
+};
+
 const ManageTaskScripts = ({ close }) => {
-  const [scriptType, setScriptType] = useState(scriptOptions[0]);
+  const [scripts, setScripts] = useState([
+    {
+      type: scriptOptions[0],
+      label: "",
+      code: "",
+    },
+  ]);
+
+  const updateType = (i, type) => {
+    setScripts(scripts.map((s, index) => (index === i ? { ...s, type } : s)));
+  };
 
   return (
     <Modal
@@ -75,77 +92,21 @@ const ManageTaskScripts = ({ close }) => {
         style={{ height: "calc(100% - 90px)" }}
       >
         <div>
-          <div className="border-b pb-10">
-            <Select
-              options={scriptOptions}
-              value={scriptType}
-              onChange={setScriptType}
-            />
-            <div className="pt-3">
-              <div>
-                <div className="rounded-md bg-blue-50 p-4">
-                  <div className="flex">
-                    <div className="flex-shrink-0">
-                      <svg
-                        className="h-5 w-5 text-blue-400"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div className="ml-3 flex-1 md:flex md:justify-between">
-                      <p className="text-sm leading-5 text-blue-700">
-                        Extract information from the page using JavaScript
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex md:gap-6 mt-6">
-                  <div className="flex flex-col w-1/3">
-                    <label
-                      htmlFor="url"
-                      className="block text-sm font-medium text-gray-700 sm:mt-px"
-                    >
-                      Label
-                    </label>
-                    <div className="sm:col-span-2 mt-2">
-                      <div className="w-full flex rounded-md shadow-sm">
-                        <input
-                          type="text"
-                          name="url"
-                          id="url"
-                          placeholder="Price"
-                          className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-300"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full">
-                    <div className="path-field">
-                      <label
-                        htmlFor="variable"
-                        className="block text-sm leading-5 font-medium text-gray-700"
-                      >
-                        JavaScript code (jQuery is supported)
-                      </label>
-                      <div className="rounded-md shadow-sm">
-                        <textarea
-                          rows="3"
-                          className="flex-1 mt-2 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-300 px-3 py-2 resize-none"
-                          placeholder="$('#listing > .offer > img').text()"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          {scripts.map((script, i) => (
+            <div className="border-b pb-10">
+              <Select
+                options={scriptOptions}
+                value={script.type}
+                onChange={(type) => updateType(i, type)}
+              />
+              <div className="pt-3">
+                {React.createElement(scriptTypes[script.type.value], {
+                  label: script.label,
+                  code: script.code,
+                })}
               </div>
             </div>
-          </div>
+          ))}
           <span className="inline-flex rounded-md mt-6 w-full flex justify-center">
             <button
               type="button"
