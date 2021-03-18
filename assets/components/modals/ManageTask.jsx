@@ -6,7 +6,7 @@ import Select from "../Select";
 import Input from "../Input";
 import axios from "../../plugins/axios";
 
-const ManageTask = ({ close, next, task }) => {
+const ManageTask = ({ close, updateAndNext, addAndNext, task }) => {
   const [id, setId] = useState(task.id || null);
   const [name, setName] = useState(task.name || "");
   const [url, setUrl] = useState(task.url || "");
@@ -34,11 +34,11 @@ const ManageTask = ({ close, next, task }) => {
     if (id) {
       axios
         .patch(`/tasks/${id}`, taskData)
-        .then((response) => next(response.data.task));
+        .then((response) => updateAndNext(response.data.task));
     } else {
       axios
         .put("/tasks", taskData)
-        .then((response) => next(response.data.task));
+        .then((response) => addAndNext(response.data.task));
     }
   };
 
@@ -47,7 +47,7 @@ const ManageTask = ({ close, next, task }) => {
       wide
       subTitle="Get started by filling in the information below to create your new task"
       close={close}
-      title="Create a new task"
+      title={id ? "Update a task" : "Create a new task"}
       footerMeta={
         <nav className="flex items-center justify-center" aria-label="Progress">
           <p className="text-sm font-medium">Step 1 of 2</p>
@@ -199,7 +199,8 @@ const ManageTask = ({ close, next, task }) => {
 
 ManageTask.propTypes = {
   close: PropTypes.func.isRequired,
-  next: PropTypes.func.isRequired,
+  addAndNext: PropTypes.func.isRequired,
+  updateAndNext: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   task: PropTypes.object.isRequired,
 };

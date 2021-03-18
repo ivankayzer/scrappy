@@ -4,7 +4,7 @@ import axios from "../plugins/axios";
 import ManageTask from "./modals/ManageTask";
 import ManageTaskScripts from "./modals/ManageTaskScripts";
 
-const TaskManager = ({ close, taskId, updateTask }) => {
+const TaskManager = ({ close, taskId, updateTask, addTask }) => {
   const [currentStep, setCurrentStep] = useState("task");
   const [task, setTask] = useState({});
   const [loading, setLoading] = useState(true);
@@ -26,7 +26,11 @@ const TaskManager = ({ close, taskId, updateTask }) => {
         <ManageTask
           task={task}
           close={close}
-          next={(task) => {
+          addAndNext={(task) => {
+            addTask(task);
+            setCurrentStep("scripts");
+          }}
+          updateAndNext={(task) => {
             updateTask(task);
             setCurrentStep("scripts");
           }}
