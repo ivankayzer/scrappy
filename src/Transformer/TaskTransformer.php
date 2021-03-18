@@ -33,11 +33,14 @@ class TaskTransformer
             'id' => $task->getId(),
             'name' => $task->getName(),
             'url' => $task->getUrl(),
+            'rawStatus' => $task->getStatus(),
             'isActive' => $task->getStatus()->equals(TaskStatus::active()),
             'lastChecked' => $this->formatLastChecked($task->getLastChecked()),
             'checkFrequency' => $this->formatFrequency($task->getCheckFrequency()),
+            'checkFrequencyInSeconds' => $task->getCheckFrequency(),
             'notificationChannel' => $task->getNotificationChannel(),
             'needsAttention' => $task->getStatus()->equals(TaskStatus::warning()),
+            'hoursOfActivity' => $task->getHoursOfActivity(),
             'events' => $mergedEvents,
         ];
     }

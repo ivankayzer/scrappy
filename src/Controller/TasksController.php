@@ -43,16 +43,37 @@ class TasksController extends AbstractController
         ]);
     }
 
+    public function getById(int $id): Response
+    {
+        $task = $this->taskRepository->find($id);
+
+        return new JsonResponse([
+            'task' => $this->transformerManager->transform($task)
+        ]);
+    }
+
     public function store(Request $request, Security $security): Response
     {
         $task = new Task();
         $task->setUser($security->getUser());
-        $task->setName($request->request->get('name'));
-        $task->setUrl($request->request->get('url'));
-        $task->setCheckFrequency($request->request->get('checkFrequency'));
-        $task->setHoursOfActivity($request->request->get('hoursOfActivity'));
-        $task->setStatus($request->request->get('status'));
-        $task->setNotificationChannel($request->request->get('notificationChannel'));
+
+        $task = $this->fillTaskFromRequest($request, $task);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $entityManager->persist($task);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'task' => $this->transformerManager->transform($task)
+        ]);
+    }
+
+    public function update(int $id, Request $request): Response
+    {
+        $task = $this->taskRepository->find($id);
+
+        $task = $this->fillTaskFromRequest($request, $task);
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -77,5 +98,17 @@ class TasksController extends AbstractController
         return new JsonResponse([
             'task' => $this->transformerManager->transform($task)
         ]);
+    }
+
+    private function fillTaskFromRequest(Request $request, Task $task): Task
+    {
+        $task->setName($request->request->get('name'));
+        $task->setUrl($request->request->get('url'));
+        $task->setCheckFrequency($request->request->get('checkFrequency'));
+        $task->setHoursOfActivity($request->request->get('hoursOfActivity'));
+        $task->setStatus($request->request->get('status'));
+        $task->setNotificationChannel($request->request->get('notificationChannel'));
+
+        return $task;
     }
 }

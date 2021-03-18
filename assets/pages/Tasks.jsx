@@ -71,6 +71,10 @@ const Tasks = () => {
 
       {isManagerOpen && (
         <TaskManager
+          updateTask={(task) => {
+            setSelectedTask(task);
+            setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
+          }}
           close={() => setIsManagerOpen(false)}
           taskId={managedTaskId}
         />

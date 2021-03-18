@@ -1,27 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import axios from "../plugins/axios";
 import ManageTask from "./modals/ManageTask";
 import ManageTaskScripts from "./modals/ManageTaskScripts";
 
-const TaskManager = ({ close, taskId }) => {
+const TaskManager = ({ close, taskId, updateTask }) => {
   const [currentStep, setCurrentStep] = useState("task");
+  const [task, setTask] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  if (taskId) {
-  // fetch from backend
-  }
+  useEffect(() => {
+    if (taskId) {
+      axios.get(`/tasks/${taskId}`).then((response) => {
+        setTask(response.data.task);
+        setLoading(false);
+      });
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <div>
-      {currentStep === "task" && (
-        <ManageTask close={close} next={() => setCurrentStep("scripts")} />
+      {!loading && currentStep === "task" && (
+        <ManageTask
+          task={task}
+          close={close}
+          next={(task) => {
+            updateTask(task);
+            setCurrentStep("scripts");
+          }}
+        />
       )}
-      {currentStep === "scripts" && <ManageTaskScripts close={close} />}
+      {!loading && currentStep === "scripts" && (
+        <ManageTaskScripts close={close} />
+      )}
     </div>
   );
 };
 
 TaskManager.propTypes = {
   close: PropTypes.func.isRequired,
+  updateTask: PropTypes.func.isRequired,
   taskId: PropTypes.number,
 };
 

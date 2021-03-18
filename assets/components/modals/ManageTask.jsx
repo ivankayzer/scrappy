@@ -4,25 +4,42 @@ import PropTypes from "prop-types";
 import Modal from "../Modal";
 import Select from "../Select";
 import Input from "../Input";
-import axios from '../../plugins/axios';
+import axios from "../../plugins/axios";
 
-const ManageTask = ({ close, next }) => {
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  const [status, setStatus] = useState(1);
-  const [notificationChannel, setNotificationChannel] = useState("telegram");
-  const [checkFrequency, setCheckFrequency] = useState(300);
-  const [hoursOfActivity, setHoursOfActivity] = useState(null);
+const ManageTask = ({ close, next, task }) => {
+  const [id, setId] = useState(task.id || null);
+  const [name, setName] = useState(task.name || "");
+  const [url, setUrl] = useState(task.url || "");
+  const [status, setStatus] = useState(task.rawStatus || 1);
+  const [notificationChannel, setNotificationChannel] = useState(
+    task.notificationChannel || "telegram"
+  );
+  const [checkFrequency, setCheckFrequency] = useState(
+    task.checkFrequencyInSeconds || "300"
+  );
+  const [hoursOfActivity, setHoursOfActivity] = useState(
+    task.hoursOfActivity || ""
+  );
 
   const submit = () => {
-    axios.put('/tasks', {
+    const taskData = {
       name,
       url,
       status,
       notificationChannel,
       checkFrequency,
       hoursOfActivity,
-    }).then(next);
+    };
+
+    if (id) {
+      axios
+        .patch(`/tasks/${id}`, taskData)
+        .then((response) => next(response.data.task));
+    } else {
+      axios
+        .put("/tasks", taskData)
+        .then((response) => next(response.data.task));
+    }
   };
 
   return (
@@ -183,6 +200,8 @@ const ManageTask = ({ close, next }) => {
 ManageTask.propTypes = {
   close: PropTypes.func.isRequired,
   next: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  task: PropTypes.object.isRequired,
 };
 
 export default ManageTask;

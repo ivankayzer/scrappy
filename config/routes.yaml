@@ -26,6 +26,11 @@ tasks_all:
     controller: App\Controller\TasksController::all
     methods: GET
 
+task_by_id:
+    path: /tasks/{id}
+    controller: App\Controller\TasksController::getById
+    methods: GET
+
 tasks_store:
     path: /tasks
     controller: App\Controller\TasksController::store
@@ -34,6 +39,11 @@ tasks_store:
 tasks_change_status:
     path: /tasks/{id}/status
     controller: App\Controller\TasksController::changeStatus
+    methods: PATCH
+
+tasks_update:
+    path: /tasks/{id}
+    controller: App\Controller\TasksController::update
     methods: PATCH
 
 events_all:
