@@ -46,6 +46,11 @@ tasks_update:
     controller: App\Controller\TasksController::update
     methods: PATCH
 
+tasks_delete:
+    path: /tasks/{id}
+    controller: App\Controller\TasksController::delete
+    methods: DELETE
+
 events_all:
     path: /events/all
     controller: App\Controller\EventsController::all

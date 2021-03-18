@@ -85,6 +85,18 @@ class TasksController extends AbstractController
         ]);
     }
 
+    public function delete(int $id): Response
+    {
+        $task = $this->taskRepository->find($id);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $entityManager->remove($task);
+        $entityManager->flush();
+
+        return new JsonResponse();
+    }
+
     public function changeStatus(int $id, Request $request): Response
     {
         $task = $this->taskRepository->find($id);

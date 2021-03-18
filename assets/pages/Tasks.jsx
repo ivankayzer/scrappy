@@ -53,6 +53,12 @@ const Tasks = () => {
                   setManagedTaskId(id);
                   setIsManagerOpen(true);
                 }}
+                deleteTask={(id) => {
+                  axios.delete(`/tasks/${id}`).then(() => {
+                    setTasks(tasks.filter((t) => t.id !== id));
+                    setSelectedTask(tasks[0]);
+                  });
+                }}
               />
             )}
 
