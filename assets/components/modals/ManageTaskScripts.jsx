@@ -5,8 +5,9 @@ import Modal from "../Modal";
 import Select from "../Select";
 import Execute from "../scriptTypes/Execute";
 import Snapshot from "../scriptTypes/Snapshot";
+import axios from "../../plugins/axios";
 
-const scriptOptions = [
+export const scriptOptions = [
   {
     value: "execute",
     label: "Execute",
@@ -17,22 +18,44 @@ const scriptOptions = [
   },
 ];
 
+export const defaultScript = {
+  type: scriptOptions[0],
+  label: "",
+  code: "",
+};
+
 const scriptTypes = {
   execute: Execute,
   snapshot: Snapshot,
 };
 
-const ManageTaskScripts = ({ close }) => {
-  const [scripts, setScripts] = useState([
-    {
-      type: scriptOptions[0],
-      label: "",
-      code: "",
-    },
-  ]);
+const ManageTaskScripts = ({ close, existingScripts, taskId }) => {
+  const [scripts, setScripts] = useState(existingScripts);
 
   const updateType = (i, type) => {
     setScripts(scripts.map((s, index) => (index === i ? { ...s, type } : s)));
+  };
+
+  const updateLabel = (i, label) => {
+    setScripts(scripts.map((s, index) => (index === i ? { ...s, label } : s)));
+  };
+
+  const updateCode = (i, code) => {
+    setScripts(scripts.map((s, index) => (index === i ? { ...s, code } : s)));
+  };
+
+  const submit = () => {
+    axios
+      .patch(`/tasks/${taskId}/scripts`, {
+        scripts: scripts.map((script, i) => ({
+          id: script.id || null,
+          label: script.label,
+          code: script.code,
+          type: script.type.value,
+          executionOrder: i,
+        })),
+      })
+      .then((response) => {});
   };
 
   return (
@@ -80,7 +103,8 @@ const ManageTaskScripts = ({ close }) => {
       }
       submit={
         <button
-          type="submit"
+          onClick={submit}
+          type="button"
           className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Save
@@ -93,7 +117,7 @@ const ManageTaskScripts = ({ close }) => {
       >
         <div>
           {scripts.map((script, i) => (
-            <div className="border-b pb-10">
+            <div className="border-b pb-10 mb-10">
               <Select
                 options={scriptOptions}
                 value={script.type}
@@ -103,6 +127,8 @@ const ManageTaskScripts = ({ close }) => {
                 {React.createElement(scriptTypes[script.type.value], {
                   label: script.label,
                   code: script.code,
+                  updateLabel: (label) => updateLabel(i, label),
+                  updateCode: (code) => updateCode(i, code),
                 })}
               </div>
             </div>
@@ -111,6 +137,7 @@ const ManageTaskScripts = ({ close }) => {
             <button
               type="button"
               id="add-field"
+              onClick={() => setScripts([...scripts, defaultScript])}
               className="inline-flex shadow-sm items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium
                         rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none
                         focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50
@@ -127,6 +154,7 @@ const ManageTaskScripts = ({ close }) => {
 
 ManageTaskScripts.propTypes = {
   close: PropTypes.func.isRequired,
+  taskId: PropTypes.number.isRequired,
 };
 
 export default ManageTaskScripts;

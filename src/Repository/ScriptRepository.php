@@ -47,4 +47,14 @@ class ScriptRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findAllForTaskIdOrderedByExecutionOrder(int $taskId)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.task = :val')
+            ->setParameter('val', $taskId)
+            ->addOrderBy('s.execution_order', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

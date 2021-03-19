@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Script;
 use App\Entity\Task;
+use App\Repository\ScriptRepository;
 use App\Repository\TaskRepository;
 use App\Transformer\TransformerManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,10 +25,16 @@ class TasksController extends AbstractController
      */
     private $transformerManager;
 
-    public function __construct(TaskRepository $taskRepository, TransformerManager $transformerManager)
+    /**
+     * @var ScriptRepository
+     */
+    private ScriptRepository $scriptRepository;
+
+    public function __construct(TaskRepository $taskRepository, TransformerManager $transformerManager, ScriptRepository $scriptRepository)
     {
         $this->taskRepository = $taskRepository;
         $this->transformerManager = $transformerManager;
+        $this->scriptRepository = $scriptRepository;
     }
 
     public function index(): Response
@@ -85,6 +93,51 @@ class TasksController extends AbstractController
         ]);
     }
 
+    public function updateScripts(int $taskId, Request $request): Response
+    {
+        /** @var Script[] $scripts */
+        $scripts = $this->scriptRepository->findAllForTaskIdOrderedByExecutionOrder($taskId);
+        $task = $this->taskRepository->find($taskId);
+        $entityManager = $this->getDoctrine()->getManager();
+
+        foreach ($scripts as $script) {
+            $updatedScript = array_search(function ($upScript) use ($script) {
+               return $upScript['id'] === $script->getId();
+            }, $request->request->get('scripts'));
+
+            if (!$updatedScript) {
+                $entityManager->remove($script);
+                continue;
+            }
+
+            $script->setType($updatedScript['type']);
+            $script->setCode($updatedScript['code']);
+            $script->setExecutionOrder($updatedScript['executionOrder']);
+            $script->setLabel($updatedScript['label']);
+
+            $entityManager->persist($script);
+        }
+
+        $newScripts = array_filter($request->request->get('scripts'), function ($script) {
+           return !$script['id'];
+        });
+
+        foreach ($newScripts as $newScript) {
+            $script = new Script();
+            $script->setTask($task);
+            $script->setType($newScript['type']);
+            $script->setCode($newScript['code']);
+            $script->setExecutionOrder($newScript['executionOrder']);
+            $script->setLabel($newScript['label']);
+
+            $entityManager->persist($script);
+        }
+
+        $entityManager->flush();
+
+        return new JsonResponse();
+    }
+
     public function delete(int $id): Response
     {
         $task = $this->taskRepository->find($id);
@@ -109,6 +162,15 @@ class TasksController extends AbstractController
 
         return new JsonResponse([
             'task' => $this->transformerManager->transform($task)
+        ]);
+    }
+
+    public function getScriptsByTaskId(int $taskId)
+    {
+        $scripts = $this->scriptRepository->findAllForTaskIdOrderedByExecutionOrder($taskId);
+
+        return new JsonResponse([
+            'scripts' => $this->transformerManager->transformMany($scripts)
         ]);
     }
 

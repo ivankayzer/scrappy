@@ -3,7 +3,7 @@ import React from "react";
 import ScriptDescription from "../ScriptDescription";
 import Input from "../Input";
 
-const Execute = ({ label, code }) => {
+const Execute = ({ label, code, updateLabel, updateCode }) => {
   return (
     <div>
       <ScriptDescription description="Extract information from the page using JavaScript" />
@@ -19,6 +19,7 @@ const Execute = ({ label, code }) => {
             <div className="w-full flex rounded-md shadow-sm">
               <Input
                 value={label}
+                onValueChange={updateLabel}
                 name="label"
                 placeholder="Price"
                 className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-300"
@@ -40,6 +41,7 @@ const Execute = ({ label, code }) => {
                 className="flex-1 mt-2 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-300 px-3 py-2 resize-none"
                 placeholder="$('#listing > .offer > img').text()"
                 value={code}
+                onChange={(e) => updateCode(e.target.value)}
               />
             </div>
           </div>

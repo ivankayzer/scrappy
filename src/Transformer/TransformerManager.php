@@ -3,6 +3,7 @@
 namespace App\Transformer;
 
 use App\Entity\Event;
+use App\Entity\Script;
 use App\Entity\Task;
 use App\Entity\TaskExecutionHistory;
 use Psr\Container\ContainerInterface;
@@ -13,6 +14,7 @@ class TransformerManager
         Task::class => TaskTransformer::class,
         TaskExecutionHistory::class => TaskExecutionHistoryTransformer::class,
         Event::class => EventTransformer::class,
+        Script::class => ScriptTransformer::class,
     ];
 
     private ContainerInterface $container;

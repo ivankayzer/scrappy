@@ -2,17 +2,34 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "../plugins/axios";
 import ManageTask from "./modals/ManageTask";
-import ManageTaskScripts from "./modals/ManageTaskScripts";
+import ManageTaskScripts, {
+  defaultScript,
+  scriptOptions,
+} from "./modals/ManageTaskScripts";
 
 const TaskManager = ({ close, taskId, updateTask, addTask }) => {
   const [currentStep, setCurrentStep] = useState("task");
   const [task, setTask] = useState({});
+  const [scripts, setScripts] = useState(defaultScript);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (taskId) {
-      axios.get(`/tasks/${taskId}`).then((response) => {
+      const taskPromise = axios.get(`/tasks/${taskId}`).then((response) => {
         setTask(response.data.task);
+      });
+      const scriptPromise = axios
+        .get(`/tasks/${taskId}/scripts`)
+        .then((response) => {
+          const loadedScripts = response.data.scripts.map((script) => ({
+            ...script,
+            type: scriptOptions.find((so) => so.value === script.type),
+          }));
+
+          setScripts(loadedScripts);
+        });
+
+      Promise.all([taskPromise, scriptPromise]).then(() => {
         setLoading(false);
       });
     } else {
@@ -26,18 +43,18 @@ const TaskManager = ({ close, taskId, updateTask, addTask }) => {
         <ManageTask
           task={task}
           close={close}
-          addAndNext={(task) => {
-            addTask(task);
+          addAndNext={(t) => {
+            addTask(t);
             setCurrentStep("scripts");
           }}
-          updateAndNext={(task) => {
-            updateTask(task);
+          updateAndNext={(t) => {
+            updateTask(t);
             setCurrentStep("scripts");
           }}
         />
       )}
       {!loading && currentStep === "scripts" && (
-        <ManageTaskScripts close={close} />
+        <ManageTaskScripts taskId={task.id} existingScripts={scripts} close={close} />
       )}
     </div>
   );
@@ -46,6 +63,7 @@ const TaskManager = ({ close, taskId, updateTask, addTask }) => {
 TaskManager.propTypes = {
   close: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired,
+  addTask: PropTypes.func.isRequired,
   taskId: PropTypes.number,
 };
 
