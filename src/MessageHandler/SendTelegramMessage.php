@@ -2,12 +2,12 @@
 
 namespace App\MessageHandler;
 
+use App\Dto\Change;
 use App\Dto\EventDescriptor;
 use App\Events\NotificationSentToTelegram;
 use App\Message\EmmitEvent;
 use App\Message\TaskChanged;
 use App\Repository\TaskExecutionHistoryRepository;
-use App\Repository\TaskRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use TelegramBot\Api\BotApi;
@@ -31,9 +31,23 @@ class SendTelegramMessage implements MessageHandlerInterface
     {
         $history = $this->taskExecutionRepository->find($taskChanged->getTaskHistoryId());
 
+        $task = $history->getTask();
+
+        $changes = array_map(function (Change $change) {
+            $label = $change->getLabel() ? $change->getLabel() . ": " : "";
+            return sprintf('%s ~%s~ → %s', $label, $change->getOld(), $change->getNew());
+        }, $taskChanged->getChanges());
+
+        $message = [
+            sprintf("*%s*\n", $task->getName()),
+            implode("\n", $changes),
+            sprintf("[Open URL](%s)", $task->getUrl()),
+        ];
+
         $this->botApi->sendMessage(
-            $history->getTask()->getUser()->getProviderId(),
-            $history->getTask()->getName()
+            $task->getUser()->getProviderId(),
+            implode("\n", $message),
+            'MarkdownV2',
         );
 
         $this->bus->dispatch(new EmmitEvent(

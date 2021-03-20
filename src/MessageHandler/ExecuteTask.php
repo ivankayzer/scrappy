@@ -2,6 +2,7 @@
 
 namespace App\MessageHandler;
 
+use App\Dto\Change;
 use App\Dto\EventDescriptor;
 use App\Entity\ScriptOutput;
 use App\Entity\Task;
@@ -47,7 +48,7 @@ class ExecuteTask implements MessageHandlerInterface
         $executionHistory = new TaskExecutionHistory();
         $executionHistory->setTask($task);
 
-        $taskChanged = false;
+        $changes = [];
 
         foreach ($scripts as $script) {
             /** @var ScriptOutput|null $previousOutput */
@@ -76,7 +77,11 @@ class ExecuteTask implements MessageHandlerInterface
 
             if (!$previousOutput || $previousOutput->getOutput() !== $newOutput) {
                 $output->setOutput($newOutput);
-                $taskChanged = true;
+                $changes[] = new Change(
+                    $previousOutput ? $previousOutput->getOutput() : null,
+                    $newOutput,
+                    $script->getLabel()
+                );
             }
 
             $this->entityManager->persist($output);
@@ -93,8 +98,8 @@ class ExecuteTask implements MessageHandlerInterface
             )
         ));
 
-        if ($taskChanged) {
-            $this->bus->dispatch(new TaskChanged($executionHistory->getId()));
+        if (count($changes)) {
+            $this->bus->dispatch(new TaskChanged($executionHistory->getId(), $changes));
             $this->bus->dispatch(new EmmitEvent(
                 new EventDescriptor(
                     $executionHistory->getId(),
