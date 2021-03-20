@@ -10,7 +10,7 @@ import ManageTaskScripts, {
 const TaskManager = ({ close, taskId, updateTask, addTask }) => {
   const [currentStep, setCurrentStep] = useState("task");
   const [task, setTask] = useState({});
-  const [scripts, setScripts] = useState(defaultScript);
+  const [scripts, setScripts] = useState([defaultScript]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

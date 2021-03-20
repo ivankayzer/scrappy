@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TasksController extends AbstractController
 {
@@ -60,12 +61,18 @@ class TasksController extends AbstractController
         ]);
     }
 
-    public function store(Request $request, Security $security): Response
+    public function store(Request $request, Security $security, ValidatorInterface $validator): Response
     {
         $task = new Task();
         $task->setUser($security->getUser());
 
         $task = $this->fillTaskFromRequest($request, $task);
+
+        $errors = $validator->validate($task);
+
+        if (count($errors) > 0) {
+            return new Response((string) $errors, 422);
+        }
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -77,11 +84,17 @@ class TasksController extends AbstractController
         ]);
     }
 
-    public function update(int $id, Request $request): Response
+    public function update(int $id, Request $request, ValidatorInterface $validator): Response
     {
         $task = $this->taskRepository->find($id);
 
         $task = $this->fillTaskFromRequest($request, $task);
+
+        $errors = $validator->validate($task);
+
+        if (count($errors) > 0) {
+            return new Response((string) $errors, 422);
+        }
 
         $entityManager = $this->getDoctrine()->getManager();
 

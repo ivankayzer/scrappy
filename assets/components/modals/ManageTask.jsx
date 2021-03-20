@@ -73,11 +73,13 @@ const ManageTask = ({ close, updateAndNext, addAndNext, task }) => {
     if (id) {
       axios
         .patch(`/tasks/${id}`, taskData)
-        .then((response) => updateAndNext(response.data.task));
+        .then((response) => updateAndNext(response.data.task))
+        .catch((error) => console.error(error));
     } else {
       axios
         .put("/tasks", taskData)
-        .then((response) => addAndNext(response.data.task));
+        .then((response) => addAndNext(response.data.task))
+        .catch((error) => console.error(error));
     }
   };
 
