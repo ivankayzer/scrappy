@@ -101,14 +101,16 @@ class TasksController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         foreach ($scripts as $script) {
-            $updatedScript = array_search(function ($upScript) use ($script) {
+            $updatedScript = array_filter($request->request->get('scripts'), function ($upScript) use ($script) {
                return $upScript['id'] === $script->getId();
-            }, $request->request->get('scripts'));
+            });
 
-            if (!$updatedScript) {
+            if (!count($updatedScript)) {
                 $entityManager->remove($script);
                 continue;
             }
+
+            $updatedScript = $updatedScript[0];
 
             $script->setType($updatedScript['type']);
             $script->setCode($updatedScript['code']);
