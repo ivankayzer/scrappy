@@ -6,6 +6,7 @@ import Select from "../Select";
 import Execute from "../scriptTypes/Execute";
 import Snapshot from "../scriptTypes/Snapshot";
 import axios from "../../plugins/axios";
+import Trash from "../icons/Trash";
 
 export const scriptOptions = [
   {
@@ -55,7 +56,7 @@ const ManageTaskScripts = ({ close, existingScripts, taskId }) => {
           executionOrder: i,
         })),
       })
-      .then((response) => {});
+      .then(close);
   };
 
   return (
@@ -118,11 +119,22 @@ const ManageTaskScripts = ({ close, existingScripts, taskId }) => {
         <div>
           {scripts.map((script, i) => (
             <div className="border-b pb-10 mb-10">
-              <Select
-                options={scriptOptions}
-                value={script.type}
-                onChange={(type) => updateType(i, type)}
-              />
+              <div className="flex">
+                <Select
+                  options={scriptOptions}
+                  value={script.type}
+                  onChange={(type) => updateType(i, type)}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setScripts(scripts.filter((s, index) => index !== i))
+                  }
+                  className="ml-3 inline-flex shadow-sm items-center px-2 py-1 border border-red-600 text-sm leading-5 font-medium rounded-md text-white bg-red-600 hover:bg-red-800 hover:border-red-800 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150"
+                >
+                  <Trash />
+                </button>
+              </div>
               <div className="pt-3">
                 {React.createElement(scriptTypes[script.type.value], {
                   label: script.label,
@@ -155,6 +167,8 @@ const ManageTaskScripts = ({ close, existingScripts, taskId }) => {
 ManageTaskScripts.propTypes = {
   close: PropTypes.func.isRequired,
   taskId: PropTypes.number.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  existingScripts: PropTypes.array.isRequired,
 };
 
 export default ManageTaskScripts;
