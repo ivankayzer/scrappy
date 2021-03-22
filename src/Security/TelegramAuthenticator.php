@@ -26,10 +26,16 @@ class TelegramAuthenticator extends AbstractGuardAuthenticator
      */
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router)
+    /**
+     * @var string
+     */
+    private $telegramToken;
+
+    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router, string $telegramToken)
     {
         $this->router = $router;
         $this->entityManager = $entityManager;
+        $this->telegramToken = $telegramToken;
     }
 
     public function start(Request $request, AuthenticationException $authException = null)
@@ -99,7 +105,7 @@ class TelegramAuthenticator extends AbstractGuardAuthenticator
             ->sort()
             ->join("\n");
 
-        $hashKey = hash('sha256', '1261510074:AAH6Fi3jN7IsnQs2xj0eRXvd9k6iudCakRs', true);
+        $hashKey = hash('sha256', $this->telegramToken, true);
         $hashHmac = hash_hmac('sha256', $dataToHash, $hashKey);
 
         if ($hash !== $hashHmac) {

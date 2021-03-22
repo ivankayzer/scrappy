@@ -20,3 +20,48 @@ tasks:
     path: /tasks
     controller: App\Controller\TasksController::index
     methods: GET
+
+tasks_all:
+    path: /tasks/all
+    controller: App\Controller\TasksController::all
+    methods: GET
+
+task_by_id:
+    path: /tasks/{id}
+    controller: App\Controller\TasksController::getById
+    methods: GET
+
+scripts_by_id:
+    path: /tasks/{taskId}/scripts
+    controller: App\Controller\TasksController::getScriptsByTaskId
+    methods: GET
+
+tasks_store:
+    path: /tasks
+    controller: App\Controller\TasksController::store
+    methods: PUT
+
+tasks_change_status:
+    path: /tasks/{id}/status
+    controller: App\Controller\TasksController::changeStatus
+    methods: PATCH
+
+tasks_update:
+    path: /tasks/{id}
+    controller: App\Controller\TasksController::update
+    methods: PATCH
+
+task_scripts_update:
+    path: /tasks/{taskId}/scripts
+    controller: App\Controller\TasksController::updateScripts
+    methods: PATCH
+
+tasks_delete:
+    path: /tasks/{id}
+    controller: App\Controller\TasksController::delete
+    methods: DELETE
+
+events_all:
+    path: /events/all
+    controller: App\Controller\EventsController::all
+    methods: GET

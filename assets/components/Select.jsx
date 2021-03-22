@@ -8,12 +8,11 @@ const ValueIcon = ({ icon }) => (
   </div>
 );
 
-const Select = ({ onChange, options, selected }) => {
-  const [value, setValue] = useState(options[0]);
+const Select = ({ onChange, options, value }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const decoratedSetValue = (v) => {
-    setValue(v, onChange(v));
+    onChange(v);
     setIsOpen(false);
   };
 
@@ -25,7 +24,11 @@ const Select = ({ onChange, options, selected }) => {
         className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-1 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm cursor-pointer"
       >
         <div className="flex items-center">
-          {value.icon && <ValueIcon icon={value.icon} />}
+          {value.icon ? (
+            <ValueIcon icon={value.icon} />
+          ) : (
+            <div className="ml-3" />
+          )}
           <span className="block truncate">{value.label}</span>
         </div>
         <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -64,7 +67,11 @@ const Select = ({ onChange, options, selected }) => {
                 className="text-gray-900 cursor-default select-none relative py-2 pl-1 pr-0 hover:bg-gray-50 cursor-pointer focus:outline-none"
               >
                 <div className="flex items-center">
-                  {option.icon && <ValueIcon icon={option.icon} />}
+                  {option.icon ? (
+                    <ValueIcon icon={option.icon} />
+                  ) : (
+                    <div className="ml-3" />
+                  )}
                   <span className="font-normal block">{option.label}</span>
                 </div>
               </button>
@@ -85,16 +92,11 @@ const optionPropType = {
 Select.propTypes = {
   onChange: PropTypes.func,
   options: PropTypes.arrayOf(PropTypes.shape(optionPropType)).isRequired,
-  selected: PropTypes.oneOfType([
-    PropTypes.shape(optionPropType),
-    PropTypes.string,
-    PropTypes.number,
-  ]),
+  value: PropTypes.shape(optionPropType).isRequired,
 };
 
 Select.defaultProps = {
   onChange: () => {},
-  selected: null,
 };
 
 ValueIcon.propTypes = {

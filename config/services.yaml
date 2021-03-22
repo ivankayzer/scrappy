@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.telegram.bot_token: '%env(TELEGRAM_BOT_TOKEN)%'
+    app.telegram.bot_name: '%env(TELEGRAM_BOT_NAME)%'
 
 services:
     # default configuration for services in *this* file
@@ -27,10 +29,28 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    App\Security\TelegramProvider: ~
+    App\ScriptExecution\:
+        resource: '../src/ScriptExecution/'
+        tags: [ 'controller.service_arguments' ]
 
-    League\OAuth2\Client\Provider\AbstractProvider: '@App\Security\TelegramProvider'
+    App\Transformer\:
+        resource: '../src/Transformer/'
+        tags: [ 'controller.service_arguments' ]
 
+    App\Security\TelegramAuthenticator:
+        arguments:
+            $telegramToken: '%app.telegram.bot_token%'
+
+    TelegramBot\Api\BotApi:
+        arguments:
+            $token: '%app.telegram.bot_token%'
+
+    GuzzleHttp\Client:
+        arguments:
+            $config:
+                headers:
+                    User-Agent:
+                        - 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
