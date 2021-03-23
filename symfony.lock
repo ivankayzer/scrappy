@@ -93,6 +93,18 @@
     "guzzlehttp/psr7": {
         "version": "1.7.0"
     },
+    "jfcherng/php-color-output": {
+        "version": "2.0.2"
+    },
+    "jfcherng/php-diff": {
+        "version": "6.10.0"
+    },
+    "jfcherng/php-mb-string": {
+        "version": "1.4.3"
+    },
+    "jfcherng/php-sequence-matcher": {
+        "version": "3.2.6"
+    },
     "laminas/laminas-code": {
         "version": "3.4.1"
     },

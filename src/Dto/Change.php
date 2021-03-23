@@ -10,11 +10,14 @@ class Change
 
     private ?string $label;
 
-    public function __construct(?string $old, string $new, ?string $label = null)
+    private string $type;
+
+    public function __construct(?string $old, string $new, string $type, ?string $label = null)
     {
         $this->old = $old;
         $this->new = $new;
         $this->label = $label;
+        $this->type = $type;
     }
 
     public function getOld(): ?string
@@ -30,5 +33,10 @@ class Change
     public function getLabel(): ?string
     {
         return $this->label;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 }

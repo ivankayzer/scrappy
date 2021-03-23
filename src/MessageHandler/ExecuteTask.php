@@ -80,6 +80,7 @@ class ExecuteTask implements MessageHandlerInterface
                 $changes[] = new Change(
                     $previousOutput ? $previousOutput->getOutput() : null,
                     $newOutput,
+                    $script->getType(),
                     $script->getLabel()
                 );
             }

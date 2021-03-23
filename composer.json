@@ -13,6 +13,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.8",
         "guzzlehttp/guzzle": "^7.0",
+        "jfcherng/php-diff": "^6.10",
         "nesbot/carbon": "^2.46",
         "nesk/puphpeteer": "^2.0",
         "react/event-loop": "^1.1.1",
