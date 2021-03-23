@@ -52,13 +52,13 @@ jobs:
     - name: Create deployment artifact
       env:
           GITHUB_SHA: ${{ github.sha }}
-      run: tar -czf "${GITHUB_SHA}".tar.gz --exclude="${GITHUB_SHA}".tar.gz --exclude=node_modules --exclude=*.git --exclude=tests --warning=no-file-changed .
+      run: tar -czf ../"${GITHUB_SHA}".tar.gz --exclude=node_modules --exclude=*.git --exclude=tests .
 
     - name: Store artifact for distribution
       uses: actions/upload-artifact@v2
       with:
         name: app-build
-        path: ${{ github.sha }}.tar.gz
+        path: ../${{ github.sha }}.tar.gz
 
     - name: Export deployment matrix
       id: export-deployment-matrix
