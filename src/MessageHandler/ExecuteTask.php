@@ -47,6 +47,8 @@ class ExecuteTask implements MessageHandlerInterface
 
         $executionHistory = new TaskExecutionHistory();
         $executionHistory->setTask($task);
+        $this->entityManager->persist($executionHistory);
+        $this->entityManager->flush();
 
         $changes = [];
 
