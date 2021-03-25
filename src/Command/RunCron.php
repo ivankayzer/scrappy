@@ -20,10 +20,6 @@ class RunCron extends Command
 
     private MessageBusInterface $messageBus;
 
-    private int $runs = 0;
-
-    private int $maxRuns = 100;
-
     public function __construct(string $name = null, EntityManagerInterface $entityManager, MessageBusInterface $messageBus)
     {
         parent::__construct($name);
@@ -50,8 +46,6 @@ class RunCron extends Command
         $loop = Factory::create();
 
         $loop->addPeriodicTimer($input->getArgument('interval'), function () {
-            $this->runs++;
-
             $taskRepository = $this->entityManager->getRepository(Task::class);
 
             $tasks = array_merge(
@@ -66,10 +60,6 @@ class RunCron extends Command
 
                 $this->entityManager->persist($task);
                 $this->entityManager->flush();
-            }
-
-            if ($this->runs >= $this->maxRuns) {
-                exit(0);
             }
         });
 
