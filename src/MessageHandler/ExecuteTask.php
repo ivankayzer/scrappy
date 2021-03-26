@@ -62,6 +62,8 @@ class ExecuteTask implements MessageHandlerInterface
             $output->setExecutionHistory($executionHistory);
             $output->setScript($script);
 
+            $newOutput = null;
+
             try {
                 $newOutput = $this->scriptExecutionFactory->make($script->getType())
                     ->setUrl($task->getUrl())
@@ -77,7 +79,7 @@ class ExecuteTask implements MessageHandlerInterface
                 ));
             }
 
-            if (!$previousOutput || $previousOutput->getOutput() !== $newOutput) {
+            if ($newOutput && !$previousOutput || $previousOutput->getOutput() !== $newOutput) {
                 $output->setOutput($newOutput);
                 $changes[] = new Change(
                     $previousOutput ? $previousOutput->getOutput() : null,
@@ -85,9 +87,8 @@ class ExecuteTask implements MessageHandlerInterface
                     $script->getType(),
                     $script->getLabel()
                 );
+                $this->entityManager->persist($output);
             }
-
-            $this->entityManager->persist($output);
         }
 
         $executionHistory->finish();
