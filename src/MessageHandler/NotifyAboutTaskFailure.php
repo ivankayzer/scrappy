@@ -2,19 +2,17 @@
 
 namespace App\MessageHandler;
 
-use App\Dto\Change;
 use App\Dto\EventDescriptor;
 use App\Events\NotificationSentToTelegram;
 use App\Message\EmmitEvent;
-use App\Message\TaskChanged;
+use App\Message\TaskFailed;
 use App\Repository\TaskExecutionHistoryRepository;
-use App\ScriptExecution\Snapshot;
 use App\Services\BotMessageComposer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use TelegramBot\Api\BotApi;
 
-class SendTelegramMessage implements MessageHandlerInterface
+class NotifyAboutTaskFailure implements MessageHandlerInterface
 {
     private BotApi $botApi;
 
@@ -29,32 +27,15 @@ class SendTelegramMessage implements MessageHandlerInterface
         $this->bus = $bus;
     }
 
-    public function __invoke(TaskChanged $taskChanged)
+    public function __invoke(TaskFailed $taskFailed): void
     {
-        $history = $this->taskExecutionRepository->find($taskChanged->getTaskHistoryId());
+        $history = $this->taskExecutionRepository->find($taskFailed->getTaskHistoryId());
 
         $task = $history->getTask();
 
         $composer = new BotMessageComposer();
-
-        $changes = array_map(function (Change $change) use ($composer) {
-            $label = $change->getLabel() ? $change->getLabel() . ": " : "";
-
-            if ($change->getType() === Snapshot::TYPE) {
-                return "Snapshot of the page changed";
-            }
-
-            return sprintf(
-                $composer->getChangeTemplate(),
-                $label,
-                $change->getOld(),
-                $change->getNew()
-            );
-        }, $taskChanged->getChanges());
-
         $message = $composer->bold($task->getName())
-            ->implode($changes)
-            ->link($task->getUrl())
+            ->line('Task execution failed')
             ->getMessage();
 
         $this->botApi->sendMessage(
