@@ -5,7 +5,7 @@
         "username": "ubuntu",
         "port": "22",
         "beforeHooks": "",
-        "afterHooks": "sudo chmod 777 -R /var/www/scrappy/current/var && sudo supervisorctl restart scrappy_cron && sudo supervisorctl restart scrappy_rabbit",
+        "afterHooks": "sudo supervisorctl restart scrappy_cron && sudo supervisorctl restart scrappy_rabbit",
         "path": "/var/www/scrappy"
     }
 ]
