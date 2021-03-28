@@ -7,12 +7,14 @@ use App\Dto\EventDescriptor;
 use App\Entity\ScriptOutput;
 use App\Entity\Task;
 use App\Entity\TaskExecutionHistory;
+use App\Enums\TaskStatus;
 use App\Events\ErrorDuringCheck;
 use App\Events\PageCheckedSuccessfully;
 use App\Events\PageContentChanged;
 use App\Message\EmmitEvent;
 use App\Message\TaskChanged;
 use App\Message\TaskExecutionMessage;
+use App\Message\TaskFailed;
 use App\ScriptExecution\ScriptExecutionFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -37,6 +39,9 @@ class ExecuteTask implements MessageHandlerInterface
         $this->scriptExecutionFactory = $scriptExecutionFactory;
     }
 
+    /**
+     * @todo refactor
+     */
     public function __invoke(TaskExecutionMessage $taskExecutionMessage)
     {
         /** @var Task $task */
@@ -70,13 +75,8 @@ class ExecuteTask implements MessageHandlerInterface
                     ->setScript($script)
                     ->execute();
             } catch (\Exception $e) {
-                $this->bus->dispatch(new EmmitEvent(
-                    new EventDescriptor(
-                        $executionHistory->getId(),
-                        ErrorDuringCheck::ID,
-                        $e->getMessage()
-                    )
-                ));
+                $this->bus->dispatch(new TaskFailed($executionHistory->getId(), $e));
+                continue;
             }
 
             if ($newOutput && !$previousOutput || $previousOutput->getOutput() !== $newOutput) {

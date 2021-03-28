@@ -45,16 +45,22 @@ const TaskManager = ({ close, taskId, updateTask, addTask }) => {
           close={close}
           addAndNext={(t) => {
             addTask(t);
+            setTask(t);
             setCurrentStep("scripts");
           }}
           updateAndNext={(t) => {
             updateTask(t);
+            setTask(t);
             setCurrentStep("scripts");
           }}
         />
       )}
       {!loading && currentStep === "scripts" && (
-        <ManageTaskScripts taskId={task.id} existingScripts={scripts} close={close} />
+        <ManageTaskScripts
+          taskId={task.id}
+          existingScripts={scripts}
+          close={close}
+        />
       )}
     </div>
   );

@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Task;
+use App\Enums\TaskStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -59,7 +61,7 @@ class TaskRepository extends ServiceEntityRepository
 
     public function findNeverRun()
     {
-        return $this->createQueryBuilder('t')
+        return $this->findHasAtLeastOneScriptAndActive()
             ->andWhere('t.last_checked is null')
             ->getQuery()
             ->getResult();
@@ -67,10 +69,20 @@ class TaskRepository extends ServiceEntityRepository
 
     public function findWaitingForCheck()
     {
-        return $this->createQueryBuilder('t')
+        return $this->findHasAtLeastOneScriptAndActive()
             ->andWhere('t.check_frequency > 0')
             ->andWhere("DATE_ADD(t.last_checked, t.check_frequency, 'SECOND') < CURRENT_TIMESTAMP()")
             ->getQuery()
             ->getResult();
+    }
+
+    private function findHasAtLeastOneScriptAndActive(): QueryBuilder
+    {
+        return $this->createQueryBuilder('t')
+            ->leftJoin('t.scripts', 's')
+            ->andWhere('t.status = :status')
+            ->setParameter('status', TaskStatus::active()->value)
+            ->andWhere('s.task is not null')
+            ->groupBy('s.task');
     }
 }

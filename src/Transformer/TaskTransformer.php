@@ -29,6 +29,10 @@ class TaskTransformer
             return array_merge($array1, $array2);
         }, []);
 
+        usort($mergedEvents, function ($array1, $array2) {
+           return $array1['id'] < $array2['id'];
+        });
+
         return [
             'id' => $task->getId(),
             'name' => $task->getName(),
