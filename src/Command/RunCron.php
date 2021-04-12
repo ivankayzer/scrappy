@@ -55,11 +55,6 @@ class RunCron extends Command
 
             foreach ($tasks as $task) {
                 $this->messageBus->dispatch(new TaskExecutionMessage($task->getId()));
-
-                $task->finish();
-
-                $this->entityManager->persist($task);
-                $this->entityManager->flush();
             }
         });
 

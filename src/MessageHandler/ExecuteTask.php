@@ -3,15 +3,13 @@
 namespace App\MessageHandler;
 
 use App\Dto\Change;
-use App\Dto\EventDescriptor;
+use App\Dto\Events\EventDescriptor;
+use App\Dto\Events\PageContentChangedEventDetails;
 use App\Entity\ScriptOutput;
 use App\Entity\Task;
 use App\Entity\TaskExecutionHistory;
-use App\Enums\TaskStatus;
-use App\Events\ErrorDuringCheck;
-use App\Events\PageCheckedSuccessfully;
 use App\Events\PageContentChanged;
-use App\Message\EmmitEvent;
+use App\Message\SaveEvent;
 use App\Message\TaskChanged;
 use App\Message\TaskExecutionMessage;
 use App\Message\TaskFailed;
@@ -40,7 +38,7 @@ class ExecuteTask implements MessageHandlerInterface
     }
 
     /**
-     * @todo refactor
+     * @param TaskExecutionMessage $taskExecutionMessage
      */
     public function __invoke(TaskExecutionMessage $taskExecutionMessage)
     {
@@ -52,6 +50,10 @@ class ExecuteTask implements MessageHandlerInterface
 
         $executionHistory = new TaskExecutionHistory();
         $executionHistory->setTask($task);
+
+        $task->finish();
+
+        $this->entityManager->persist($task);
         $this->entityManager->persist($executionHistory);
         $this->entityManager->flush();
 
@@ -76,7 +78,7 @@ class ExecuteTask implements MessageHandlerInterface
                     ->execute();
             } catch (\Exception $e) {
                 $this->bus->dispatch(new TaskFailed($executionHistory->getId(), $e));
-                continue;
+                return;
             }
 
             if ($newOutput && !$previousOutput || $previousOutput->getOutput() !== $newOutput) {
@@ -88,6 +90,18 @@ class ExecuteTask implements MessageHandlerInterface
                     $script->getLabel()
                 );
                 $this->entityManager->persist($output);
+
+                $this->bus->dispatch(new SaveEvent(
+                    new EventDescriptor(
+                        $executionHistory->getId(),
+                        PageContentChanged::ID,
+                        new PageContentChangedEventDetails(
+                            $script->getId(),
+                            $newOutput,
+                            $previousOutput ? $previousOutput->getOutput() : null
+                        )
+                    )
+                ));
             }
         }
 
@@ -95,21 +109,8 @@ class ExecuteTask implements MessageHandlerInterface
         $this->entityManager->persist($executionHistory);
         $this->entityManager->flush();
 
-        $this->bus->dispatch(new EmmitEvent(
-            new EventDescriptor(
-                $executionHistory->getId(),
-                PageCheckedSuccessfully::ID
-            )
-        ));
-
         if (count($changes)) {
             $this->bus->dispatch(new TaskChanged($executionHistory->getId(), $changes));
-            $this->bus->dispatch(new EmmitEvent(
-                new EventDescriptor(
-                    $executionHistory->getId(),
-                    PageContentChanged::ID
-                )
-            ));
         }
     }
 }

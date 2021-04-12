@@ -65,3 +65,8 @@ events_all:
     path: /events/all
     controller: App\Controller\EventsController::all
     methods: GET
+
+login_dev:
+    path: /login-dev
+    controller: App\Controller\LoginController::loginDev
+    methods: GET

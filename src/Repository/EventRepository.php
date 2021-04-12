@@ -48,13 +48,14 @@ class EventRepository extends ServiceEntityRepository
     }
     */
 
-    public function findAllForUser(int $userId)
+    public function findAllForUser(int $userId, int $limit = 50)
     {
         return $this->createQueryBuilder('e')
             ->leftJoin('e.taskExecutionHistory', 'teh')
             ->leftJoin('teh.task', 't')
             ->andWhere('t.user = :val')
             ->setParameter('val', $userId)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }

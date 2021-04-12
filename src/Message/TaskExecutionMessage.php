@@ -11,9 +11,6 @@ class TaskExecutionMessage
         $this->taskId = $taskId;
     }
 
-    /**
-     * @return int
-     */
     public function getTaskId(): int
     {
         return $this->taskId;

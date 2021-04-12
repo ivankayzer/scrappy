@@ -16,15 +16,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TasksController extends AbstractController
 {
-    /**
-     * @var TaskRepository
-     */
-    private $taskRepository;
+    private TaskRepository $taskRepository;
 
-    /**
-     * @var TransformerManager
-     */
-    private $transformerManager;
+    private TransformerManager $transformerManager;
 
     /**
      * @var ScriptRepository
@@ -66,18 +60,7 @@ class TasksController extends AbstractController
         $task = new Task();
         $task->setUser($security->getUser());
 
-        $task = $this->fillTaskFromRequest($request, $task);
-
-        $errors = $validator->validate($task);
-
-        if (count($errors) > 0) {
-            return new Response((string) $errors, 422);
-        }
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $entityManager->persist($task);
-        $entityManager->flush();
+        $task = $this->updateTaskFromRequest($task, $request, $validator);
 
         return new JsonResponse([
             'task' => $this->transformerManager->transform($task)
@@ -88,18 +71,7 @@ class TasksController extends AbstractController
     {
         $task = $this->taskRepository->find($id);
 
-        $task = $this->fillTaskFromRequest($request, $task);
-
-        $errors = $validator->validate($task);
-
-        if (count($errors) > 0) {
-            return new Response((string) $errors, 422);
-        }
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $entityManager->persist($task);
-        $entityManager->flush();
+        $task = $this->updateTaskFromRequest($task, $request, $validator);
 
         return new JsonResponse([
             'task' => $this->transformerManager->transform($task)
@@ -197,6 +169,24 @@ class TasksController extends AbstractController
         $task->setHoursOfActivity($request->request->get('hoursOfActivity'));
         $task->setStatus($request->request->get('status'));
         $task->setNotificationChannel($request->request->get('notificationChannel'));
+
+        return $task;
+    }
+
+    private function updateTaskFromRequest(Task $initTask, Request $request, ValidatorInterface $validator)
+    {
+        $task = $this->fillTaskFromRequest($request, $initTask);
+
+        $errors = $validator->validate($task);
+
+        if (count($errors) > 0) {
+            return new Response((string) $errors, 422);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $entityManager->persist($task);
+        $entityManager->flush();
 
         return $task;
     }

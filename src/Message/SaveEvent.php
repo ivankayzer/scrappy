@@ -2,9 +2,9 @@
 
 namespace App\Message;
 
-use App\Dto\EventDescriptor;
+use App\Dto\Events\EventDescriptor;
 
-class EmmitEvent
+class SaveEvent
 {
     private EventDescriptor $eventDescriptor;
 
