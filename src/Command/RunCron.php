@@ -37,7 +37,7 @@ class RunCron extends Command
             'interval',
             InputArgument::OPTIONAL,
             'Interval to run event loop',
-            25
+            5
         );
     }
 

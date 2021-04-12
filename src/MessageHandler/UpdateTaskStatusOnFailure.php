@@ -2,7 +2,8 @@
 
 namespace App\MessageHandler;
 
-use App\Dto\EventDescriptor;
+use App\Dto\Events\EventDescriptor;
+use App\Dto\Events\PlainTextEventDetails;
 use App\Enums\TaskStatus;
 use App\Events\ErrorDuringCheck;
 use App\Message\SaveEvent;
@@ -36,7 +37,7 @@ class UpdateTaskStatusOnFailure implements MessageHandlerInterface
         $eventDescriptor = new EventDescriptor(
             $history->getId(),
             ErrorDuringCheck::ID,
-            $taskFailed->getException()->getMessage()
+            new PlainTextEventDetails($taskFailed->getException()->getMessage())
         );
 
         $this->bus->dispatch(new SaveEvent($eventDescriptor));

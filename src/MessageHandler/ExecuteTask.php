@@ -3,7 +3,8 @@
 namespace App\MessageHandler;
 
 use App\Dto\Change;
-use App\Dto\EventDescriptor;
+use App\Dto\Events\EventDescriptor;
+use App\Dto\Events\PageContentChangedEventDetails;
 use App\Entity\ScriptOutput;
 use App\Entity\Task;
 use App\Entity\TaskExecutionHistory;
@@ -49,6 +50,10 @@ class ExecuteTask implements MessageHandlerInterface
 
         $executionHistory = new TaskExecutionHistory();
         $executionHistory->setTask($task);
+
+        $task->finish();
+
+        $this->entityManager->persist($task);
         $this->entityManager->persist($executionHistory);
         $this->entityManager->flush();
 
@@ -85,6 +90,18 @@ class ExecuteTask implements MessageHandlerInterface
                     $script->getLabel()
                 );
                 $this->entityManager->persist($output);
+
+                $this->bus->dispatch(new SaveEvent(
+                    new EventDescriptor(
+                        $executionHistory->getId(),
+                        PageContentChanged::ID,
+                        new PageContentChangedEventDetails(
+                            $script->getId(),
+                            $newOutput,
+                            $previousOutput ? $previousOutput->getOutput() : null
+                        )
+                    )
+                ));
             }
         }
 
@@ -94,12 +111,6 @@ class ExecuteTask implements MessageHandlerInterface
 
         if (count($changes)) {
             $this->bus->dispatch(new TaskChanged($executionHistory->getId(), $changes));
-            $this->bus->dispatch(new SaveEvent(
-                new EventDescriptor(
-                    $executionHistory->getId(),
-                    PageContentChanged::ID
-                )
-            ));
         }
     }
 }

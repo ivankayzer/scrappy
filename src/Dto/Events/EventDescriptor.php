@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto;
+namespace App\Dto\Events;
 
 class EventDescriptor
 {
@@ -8,9 +8,9 @@ class EventDescriptor
 
     private string $eventId;
 
-    private ?string $eventDetails;
+    private ?EventDetailsInterface $eventDetails;
 
-    public function __construct(int $taskHistoryId, string $eventId, ?string $eventDetails = null)
+    public function __construct(int $taskHistoryId, string $eventId, EventDetailsInterface $eventDetails = null)
     {
         $this->taskHistoryId = $taskHistoryId;
         $this->eventId = $eventId;
@@ -29,6 +29,6 @@ class EventDescriptor
 
     public function getEventDetails(): ?string
     {
-        return $this->eventDetails;
+        return $this->eventDetails ? $this->eventDetails->toString() : null;
     }
 }

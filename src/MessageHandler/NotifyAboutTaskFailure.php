@@ -2,7 +2,7 @@
 
 namespace App\MessageHandler;
 
-use App\Dto\EventDescriptor;
+use App\Dto\Events\EventDescriptor;
 use App\Events\NotificationSentToTelegram;
 use App\Message\SaveEvent;
 use App\Message\TaskFailed;
