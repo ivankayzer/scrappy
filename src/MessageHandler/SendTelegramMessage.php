@@ -5,7 +5,7 @@ namespace App\MessageHandler;
 use App\Dto\Change;
 use App\Dto\EventDescriptor;
 use App\Events\NotificationSentToTelegram;
-use App\Message\EmmitEvent;
+use App\Message\SaveEvent;
 use App\Message\TaskChanged;
 use App\Repository\TaskExecutionHistoryRepository;
 use App\ScriptExecution\Snapshot;
@@ -63,7 +63,7 @@ class SendTelegramMessage implements MessageHandlerInterface
             $composer->getParseMode()
         );
 
-        $this->bus->dispatch(new EmmitEvent(
+        $this->bus->dispatch(new SaveEvent(
             new EventDescriptor(
                 $history->getId(),
                 NotificationSentToTelegram::ID

@@ -5,7 +5,7 @@ namespace App\MessageHandler;
 use App\Dto\EventDescriptor;
 use App\Enums\TaskStatus;
 use App\Events\ErrorDuringCheck;
-use App\Message\EmmitEvent;
+use App\Message\SaveEvent;
 use App\Message\TaskFailed;
 use App\Repository\TaskExecutionHistoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,13 +33,13 @@ class UpdateTaskStatusOnFailure implements MessageHandlerInterface
 
         $task = $history->getTask();
 
-        $this->bus->dispatch(new EmmitEvent(
-            new EventDescriptor(
-                $history->getId(),
-                ErrorDuringCheck::ID,
-                $taskFailed->getException()->getMessage()
-            )
-        ));
+        $eventDescriptor = new EventDescriptor(
+            $history->getId(),
+            ErrorDuringCheck::ID,
+            $taskFailed->getException()->getMessage()
+        );
+
+        $this->bus->dispatch(new SaveEvent($eventDescriptor));
 
         $task->setStatus(TaskStatus::warning()->value);
         $this->entityManager->persist($task);

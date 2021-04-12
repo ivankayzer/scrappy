@@ -4,7 +4,7 @@ namespace App\Message;
 
 use App\Dto\EventDescriptor;
 
-class EmmitEvent
+class SaveEvent
 {
     private EventDescriptor $eventDescriptor;
 

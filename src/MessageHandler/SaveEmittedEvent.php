@@ -4,7 +4,7 @@ namespace App\MessageHandler;
 
 use App\Entity\Event;
 use App\Entity\TaskExecutionHistory;
-use App\Message\EmmitEvent;
+use App\Message\SaveEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -17,7 +17,7 @@ class SaveEmittedEvent implements MessageHandlerInterface
         $this->entityManager = $entityManager;
     }
 
-    public function __invoke(EmmitEvent $emmitEvent)
+    public function __invoke(SaveEvent $emmitEvent)
     {
         /** @var TaskExecutionHistory $taskHistory */
         $taskHistory = $this->entityManager->getRepository(TaskExecutionHistory::class)

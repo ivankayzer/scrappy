@@ -8,11 +8,6 @@ abstract class AbstractEvent implements EventInterface
 {
     protected Event $event;
 
-    public function __construct(Event $event)
-    {
-        $this->event = $event;
-    }
-
     abstract public function getColor(): string;
 
     abstract public function getIsImportant(): bool;
@@ -22,4 +17,9 @@ abstract class AbstractEvent implements EventInterface
     abstract public function getDetails(): ?string;
 
     abstract public function getChanges(): ?array;
+
+    public function setEvent(Event $event): void
+    {
+        $this->event = $event;
+    }
 }

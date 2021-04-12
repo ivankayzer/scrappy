@@ -39,6 +39,10 @@ services:
         resource: '../src/Transformer/'
         tags: [ 'controller.service_arguments' ]
 
+    App\Events\:
+        resource: '../src/Events/'
+        tags: [ 'controller.service_arguments' ]
+
     App\Security\TelegramAuthenticator:
         arguments:
             $telegramToken: '%app.telegram.bot_token%'
