@@ -21,6 +21,8 @@ class TaskTransformer
             $task->getTaskExecutionHistories()->toArray()
         );
 
+        $history = array_slice($history, 0, 50);
+
         $historyEvents = array_map(function ($transformedHistory) {
             return $transformedHistory['events'];
         }, $history);
