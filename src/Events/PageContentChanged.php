@@ -5,6 +5,7 @@ namespace App\Events;
 use App\Entity\Event;
 use App\Repository\ScriptRepository;
 use App\Repository\TaskRepository;
+use App\ScriptExecution\Snapshot;
 
 class PageContentChanged extends AbstractEvent
 {
@@ -40,10 +41,8 @@ class PageContentChanged extends AbstractEvent
     public function getChanges(): ?array
     {
         $defaultChanges = [
-            [
-                'old' => null,
-                'new' => null,
-            ]
+            'old' => null,
+            'new' => null,
         ];
 
         if (!$this->event->getDetails()) {
@@ -62,13 +61,17 @@ class PageContentChanged extends AbstractEvent
 
         $script = $this->scriptRepository->find($changes['script_id']);
 
+        if ($script->getType() === Snapshot::TYPE) {
+            return [
+                'full' => 'Snapshot has changed'
+            ];
+        }
+
         $scriptLabel = $script->getLabel() ? $script->getLabel() . ': ' : '';
 
         return [
-            [
-                'old' => $scriptLabel . $this->formatOutput($changes['old_output']),
-                'new' => $scriptLabel . $this->formatOutput($changes['new_output']),
-            ]
+            'old' => $scriptLabel . $this->formatOutput($changes['old_output']),
+            'new' => $scriptLabel . $this->formatOutput($changes['new_output']),
         ];
     }
 

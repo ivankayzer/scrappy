@@ -61,28 +61,35 @@ const Event = ({
 
           {changes ? (
             <div className="mt-2 text-sm text-gray-600">
-              {changes.map((change) => (
-                <div key={change.old} className="flex items-center">
-                  <span className="line-through">{change.old}</span>
-                  <span className="mx-3">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </span>
-                  <span>{change.new}</span>
-                </div>
-              ))}
+              <div className="flex items-center">
+                {changes.full ? (
+                  <span>{changes.full}</span>
+                ) : (
+                  <>
+                    <span className="line-through">{changes.old}</span>
+                    {changes.old && (
+                      <span className="mx-3">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          />
+                        </svg>
+                      </span>
+                    )}
+
+                    <span>{changes.new}</span>
+                  </>
+                )}
+              </div>
             </div>
           ) : null}
         </div>
