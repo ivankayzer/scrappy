@@ -12,32 +12,50 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class LoginController extends AbstractController
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private UserRepository $userRepository;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
+
+    private TokenStorageInterface $tokenStorage;
 
     public function __construct(
         UserRepository $userRepository,
-        EntityManagerInterface $entityManager
-    ) {
+        EntityManagerInterface $entityManager,
+        TokenStorageInterface $tokenStorage
+    )
+    {
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
+        $this->tokenStorage = $tokenStorage;
     }
 
-    public function index()
+    public function index(): Response
     {
         return $this->render('login.html.twig');
+    }
+
+    public function loginDev(): RedirectResponse
+    {
+        $loginDevIsEnabled = $this->getParameter('app.login_dev_is_enabled') === "true";
+
+        if (!$loginDevIsEnabled) {
+            throw new UnauthorizedHttpException('You Shall Not Pass');
+        }
+
+        $user = $this->userRepository->findOneBy([]);
+
+        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+
+        $this->tokenStorage->setToken($token);
+
+        return $this->redirectToRoute("tasks");
     }
 }
