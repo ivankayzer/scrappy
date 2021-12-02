@@ -14,16 +14,18 @@ return document
 
 will check the page with selected interval and will notify user on selector text changes
 
-![Step 1](https://i.imgur.com/ZPGYFSj.png)
-![Step 2](https://i.imgur.com/SYEbrcO.png)
-![Output](https://i.imgur.com/rjNa6tg.png)
-
 ## Technologies used
 - PHP 7.4 and Symfony 5.2
 - MariaDB
 - Redis
 - Ngrok (for Telegram domain registration)
 - RabbitMQ
+
+## Demo
+
+Step 1             |  Step 2                    | Output
+:-----------------:|:-------------------------:|:------------------------------:
+![](https://i.imgur.com/ZPGYFSj.png)  |  ![](https://i.imgur.com/SYEbrcO.png) |  ![](https://i.imgur.com/rjNa6tg.png)
 
 
 ## Contributing
