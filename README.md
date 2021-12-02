@@ -12,7 +12,7 @@ return document
   .innerText
 ```
 
-will check the page with selected interval and will notify user on selector text changes
+will check the page with selected interval and will notify the user of selector text changes
 
 ## Technologies used
 - PHP 7.4 and Symfony 5.2
