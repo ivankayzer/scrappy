@@ -18,7 +18,7 @@ will check the page with selected interval and will notify user on selector text
 - PHP 7.4 and Symfony 5.2
 - MariaDB
 - Redis
-- Ngrok (for Telegram domain registration)
+- Ngrok (for Telegram bot domain registration)
 - RabbitMQ
 
 ## Demo
